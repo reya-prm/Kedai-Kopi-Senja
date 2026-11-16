@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Override;
 
 class Bahan extends Model
 {
+    // nama tabelnya nggak berakhiran "s", jadi harus ditulis sendiri
     protected $table = 'bahan';
 
     protected $fillable = [
-        'nama', 'kunci_nama', 'satuan_dasar', 'stok', 'batas_minimum', 'harga_per_satuan', 'harga_diperbarui_pada',
+        'nama', 'kunci_nama', 'satuan_dasar', 'stok',
+        'batas_minimum', 'harga_per_satuan', 'harga_diperbarui_pada',
     ];
 
     protected function casts(): array
@@ -24,17 +25,16 @@ class Bahan extends Model
         ];
     }
 
-    //otomatis tiap bahan disimpan 'kunci_nama' singkron trus sama nama
-    #[Override]
+    // otomatis tiap bahan disimpan, kunci_nama sinkron sama nama
     protected static function booted(): void
     {
-        static::saving(function(Bahan $bahan) {
-            $bahan->kunci_nama = self::buatKunci($bahan->nama);
+        static::saving(function (Bahan $bahan) {
+            $bahan->kunci_nama = self::makeKey($bahan->nama);
         });
     }
 
-    // "Susu UHT " dan "susu uht" menghasilkan kunci yang sama -> ditolak oleh unique di DB.
-    public static function buatKunci(string $nama):string
+    // "Susu UHT " dan "susu uht" hasilnya sama, jadi bentrok di unique database
+    public static function makeKey(string $nama): string
     {
         return mb_strtolower(trim($nama));
     }

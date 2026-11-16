@@ -8,52 +8,84 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class BahanController extends Controller
-{   
-    // //daftar semua bahan, sesuai abjad
-    // public function index()
-    // {
-    //     return view('manajer.bahan.index', ['daftar' => Bahan::orderBy('nama')->get()]);
-    // }
+{
+    // daftar semua bahan, diurutkan sesuai abjad
+    public function index()
+    {
+        return view('manajer.bahan.index', ['items' => Bahan::orderBy('nama')->get()]);
+    }
 
-    // //form tambah. tambah dan ubah bisa dipake disini
-    // public function create()
-    // {
-    //     return view('manajer.bahan.form', ['bahan' => new Bahan]);
-    // }
+    // form tambah. model kosong dikirim biar form yang sama bisa dipakai buat tambah dan ubah
+    public function create()
+    {
+        return view('manajer.bahan.form', ['bahan' => new Bahan]);
+    }
 
-    // public function store(Request $request)
-    // {
-    //     $data = $request->validate($this->aturan(null));
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'nama' => ['required', 'string', 'max:255'],
+            'satuan_dasar' => ['required', 'in:g,ml,pcs'],
+            'batas_minimum' => ['required', 'numeric', 'min:0', 'max:99999999'],
+        ]);
 
-    //     Bahan::create($data);
+        // cek nama ganda: "Susu" dan " susu " dianggap sama (huruf besar/kecil dan spasi pinggir diabaikan)
+        $key = Bahan::makeKey($data['nama']);
 
-    //     return redirect()->route('manajer.bahan.index')->with('sukses', 'Bahan berhasil ditambahkan.');
-    // }
+        if (Bahan::where('kunci_nama', $key)->exists()) {
+            return back()->withErrors(['nama' => 'Nama bahan sudah ada.'])->withInput();
+        }
 
-    // public function edit(Bahan $bahan)
-    // {
-    //     return view('manajer.bahan.form', compact('bahan'));
-    // }
+        Bahan::create($data);
 
-    // public function update(Request $request, Bahan $bahan)
-    // {
-    //     $data = $request->validate($this->aturan($bahan));
+        return redirect()->route('manajer.bahan.index')->with('success', 'Bahan berhasil ditambahkan.');
+    }
 
-    //     $bahan->update($data);
+    // $bahan keisi otomatis dari id di URL, kalau id-nya nggak ada langsung 404
+    public function edit(Bahan $bahan)
+    {
+        return view('manajer.bahan.form', compact('bahan'));
+    }
 
-    //     return redirect()->route('manajer.bahan.index')->with('sukses', 'Bahan berhasil diperbarui.');
-    // }
+    public function update(Request $request, Bahan $bahan)
+    {
+        // satuan_dasar sengaja nggak ada di sini, jadi nggak bisa diubah
+        $data = $request->validate([
+            'nama' => ['required', 'string', 'max:255'],
+            'batas_minimum' => ['required', 'numeric', 'min:0', 'max:99999999'],
+        ]);
 
-    // public function destroy(Bahan $bahan)
-    // {
-    //     try{
-    //         $bahan->delete();
-    //     } catch (QueryException $e) {
-    //         //23000 = 
-    //         if ($e->getCode() !== '23000') {
-    //             throw $e;
-    //         }
-    //     }
-    // }
+        // sama kayak tambah, tapi bahan ini sendiri nggak dihitung.
+        // kalau nggak dikecualiin, nyimpen "Susu" tanpa ganti nama bakal dianggap bentrok sama dirinya sendiri
+        $key = Bahan::makeKey($data['nama']);
 
+        $dipakaiBahanLain = Bahan::where('kunci_nama', $key)
+            ->where('id', '!=', $bahan->id)
+            ->exists();
+
+        if ($dipakaiBahanLain) {
+            return back()->withErrors(['nama' => 'Nama bahan sudah ada.'])->withInput();
+        }
+
+        $bahan->update($data);
+
+        return redirect()->route('manajer.bahan.index')->with('success', 'Bahan berhasil diperbarui.');
+    }
+
+    public function destroy(Bahan $bahan)
+    {
+        try {
+            $bahan->delete();
+        } catch (QueryException $e) {
+            // 23000 = database nolak karena bahan masih dipakai di resep atau riwayat stok.
+            // error jenis lain tetap dilempar biar ketahuan kalau ada masalah beneran
+            if ($e->getCode() !== '23000') {
+                throw $e;
+            }
+
+            return back()->with('error', 'Bahan tidak bisa dihapus karena masih dipakai di resep atau riwayat stok.');
+        }
+
+        return back()->with('success', 'Bahan dihapus.');
+    }
 }

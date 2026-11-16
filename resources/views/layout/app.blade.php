@@ -11,13 +11,10 @@
         <div class="max-w-screen-7xl mx-auto flex items-center gap-4 px-4 py-3 text-sm">
             <a href="{{ route('dashboard') }}" class="text-lg font-semibold">Kedai Kopi Senja</a>
 
-            {{-- ini cuma shortcut navigasi, penjaga akses sebenarnya ada di middleware rute --}}
-            {{-- @if (auth()->user()->role === 'manajer')
-                <a href="{{ route('manajer.bahan.index') }}">Bahan</a>
-                <a href="{{ route('manajer.menu.index') }}">Menu</a>
-            @endif --}}
-
-            {{-- <a href="{{ route('password.edit') }}" class="text-gray-700 hover:text-blue-700">Ganti Password</a> --}}
+            {{-- link buat manajer misal bahan, resep, dll --}}
+            @if (auth()->user()->role === 'manajer')
+                <a href="{{ route('manajer.bahan.index') }}" class="text-gray-700 hover:text-blue-700">Bahan</a>
+            @endif
 
             <div class="ml-auto flex items-center gap-4">
                 <span class="text-gray-500">{{ auth()->user()->name }} · {{ auth()->user()->role }}</span>
