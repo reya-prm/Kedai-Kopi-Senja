@@ -2,31 +2,23 @@
 
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\LoginController;
-use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Route;
 
-
+// buka alamat '/' langsung dilempar ke dashboard
 Route::redirect('/', '/dashboard');
 
-//buat yang belum login
-Route::middleware('guest')->group(function (){
-    Route::get('/login', [LoginController::class, 'form'])->name('login');
-    Route::post('/login', [LoginController::class, 'masuk']);
+// buat yg belum login nanti di lempar ke login
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
 });
 
-//buat yg udah login
-Route::middleware('auth')->group(function (){
+// buat yg udah login
+Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::post('/keluar', [LoginController::class, 'keluar'])->name('keluar');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    //khusus manajer
-    Route::middleware('peran:manajer')->group(function (){
-        Route::get('/manajer/uji', [DashboardController::class, 'ujimanajer'])->name('manajer.uji');
-    });
-
-    //khusus kasir
-    Route::middleware('peran:kasir')->group(function (){
-        Route::get('/kasir/uji', [DashboardController::class, 'ujikasir'])->name('kasir.uji');
-    });
+    // rute uji sementara
+    Route::middleware('role:manajer')->get('/uji/manajer', [DashboardController::class, 'testManajer'])->name('test.manajer');
+    Route::middleware('role:kasir')->get('/uji/kasir', [DashboardController::class, 'testKasir'])->name('test.kasir');
 });
-

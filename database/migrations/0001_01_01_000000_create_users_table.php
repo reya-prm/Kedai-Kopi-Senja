@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pengguna', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->enum('peran', ['manajer', 'kasir', 'pelanggan']);
+            $table->string('name');
+            $table->enum('role', ['manajer', 'kasir', 'pelanggan']);
+            $table->string('username')->nullable()->unique();  // login staf (kasir & manajer)
+            $table->string('phone', 20)->nullable()->unique(); // login pelanggan di APK
+            // belum dipakai, disiapin buat fitur opsional reset password via email
             $table->string('email')->nullable()->unique();
-            $table->string('nomor_hp', 20)->nullable()->unique();
             $table->string('password');
-            $table->boolean('wajib_ganti_password')->default(false);
+            // true setelah kasir reset password pelanggan -> wajib ganti saat login berikutnya
+            $table->boolean('must_change_password')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

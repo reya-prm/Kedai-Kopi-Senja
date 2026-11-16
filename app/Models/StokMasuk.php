@@ -9,7 +9,7 @@ class StokMasuk extends Model
 {
     protected $table = 'stok_masuk';
 
-    protected $fillable = ['bahan_id', 'pengguna_id', 'jumlah', 'tanggal'];
+    protected $fillable = ['bahan_id', 'user_id', 'jumlah', 'tanggal'];
 
     protected function casts(): array
     {
@@ -21,8 +21,8 @@ class StokMasuk extends Model
         return $this->belongsTo(Bahan::class, 'bahan_id');
     }
 
-    public function pengguna(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'pengguna_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

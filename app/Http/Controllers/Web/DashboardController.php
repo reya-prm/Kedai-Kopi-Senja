@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -12,12 +11,12 @@ class DashboardController extends Controller
         return view('dashboard');
     }
 
-    public function ujiManajer()
+    public function testManajer()
     {
         return 'Area Manajer';
     }
 
-    public function ujiKasir()
+    public function testKasir()
     {
         return 'Area Kasir';
     }

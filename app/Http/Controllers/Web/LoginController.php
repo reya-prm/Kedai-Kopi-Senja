@@ -8,38 +8,39 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function form()
+    public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    public function masuk(Request $request)
-    {   
-        //validasi wajib isi form, biar ga asal submit
+    public function login(Request $request)
+    {
         $data = $request->validate([
-            'email' => ['required', 'email'],
+            'username' => ['required', 'string'],
             'password' => ['required'],
         ]);
 
-        //membatasi hak login biar bisa cuma kasir dan manajer, trus nolak akun pelanggan juga walau data nya benar
-        $kredensial = $data + ['peran' => ['kasir', 'manajer']];
+        // role ikut jadi syarat login: akun pelanggan nggak bisa masuk lewat web,
+        // karena pelanggan cuma boleh pakai APK
+        $credentials = $data + ['role' => ['kasir', 'manajer']];
 
-        //bikin fitur remember me, trus kembaliin user ke halaman login kalo misal loginnya gagal trus di kasi pesan yg sesuai dngn kodingan di bawah
-        if(! Auth::attempt($kredensial, $request->boolean('ingat'))){
-            return back()->withErrors(['email' => 'Email atau password salah.'])->onlyInput('email');
+        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+            // pesannya sengaja satu aja, biar orang nggak bisa nebak username mana yang terdaftar
+            return back()->withErrors(['username' => 'Username atau password salah.'])
+                         ->onlyInput('username');
         }
 
-        //ganti id sesi yg baru, biar yg lama ga di pake sama orng
+        // ganti ID sesi setelah login, biar sesi lama nggak bisa dipakai orang lain
         $request->session()->regenerate();
 
         return redirect()->route('dashboard');
     }
 
-    public function keluar(Request $request)
+    public function logout(Request $request)
     {
         Auth::logout();
-        $request->session()->invalidate(); //buat buang semua isi sesi
-        $request->session()->regenerateToken(); //token csrd diganti baru
+        $request->session()->invalidate();      // buang semua isi sesi
+        $request->session()->regenerateToken(); // token CSRF diganti baru
 
         return redirect()->route('login');
     }

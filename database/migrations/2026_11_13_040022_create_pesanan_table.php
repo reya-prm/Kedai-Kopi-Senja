@@ -14,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('pesanan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pelanggan_id')->nullable()->constrained('pengguna')->restrictOnDelete();
-            $table->foreignId('dibuat_oleh')->constrained('pengguna')->restrictOnDelete();
+            $table->foreignId('pelanggan_id')->nullable()->constrained('users')->restrictOnDelete();
+            $table->foreignId('dibuat_oleh')->constrained('users')->restrictOnDelete();
             $table->unsignedTinyInteger('nomor_meja')->nullable();
             $table->enum('metode_bayar', ['tunai', 'qris']);
             $table->enum('status', ['baru', 'diproses', 'selesai', 'dibatalkan'])->default('baru');
