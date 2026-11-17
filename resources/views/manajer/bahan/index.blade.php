@@ -28,11 +28,12 @@
                 <td class="px-6 py-3 text-right">{{ (float) $b->stok }}</td>
                 <td class="px-6 py-3 text-right">{{ (float) $b->batas_minimum }}</td>
                 <td class="px-6 py-3">
-                    
+                {{-- is_low_stock datang dari accessor di model Bahan --}}
                     @if ($b->is_low_stock)
                         <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Menipis</span>
-                    @endif
+                    @else
                         <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Aman</span>
+                    @endif
                 </td>
                 <td class="px-6 py-3 text-right whitespace-nowrap">
                     <a href="{{ route('manajer.bahan.edit', $b) }}" class="font-medium text-blue-700 hover:underline">Ubah</a>
