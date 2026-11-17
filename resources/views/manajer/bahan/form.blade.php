@@ -11,7 +11,7 @@
     @if ($bahan->exists) @method('PUT') @endif
 
     <h1 class="text-xl font-bold">{{ $bahan->exists ? 'Ubah Bahan' : 'Tambah Bahan' }}</h1>
-
+    
     <div>
         <label class="block mb-2 text-sm font-medium text-gray-900">Nama</label>
         {{-- old() = isi lama yang diketik user kalau validasi gagal, biar nggak ngetik ulang --}}

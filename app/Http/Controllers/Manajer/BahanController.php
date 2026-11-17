@@ -15,6 +15,14 @@ class BahanController extends Controller
         return view('manajer.bahan.index', ['items' => Bahan::orderBy('nama')->get()]);
     }
 
+    //daftar bahan yg stoknya dibawah atau sama dngn batas minimum
+    public function lowStock()
+    {
+        return view('manajer.bahan.low-stock', [
+            'items' => Bahan::lowStock()->orderBy('nama')->get(),
+        ]);
+    }
+
     // form tambah. model kosong dikirim biar form yang sama bisa dipakai buat tambah dan ubah
     public function create()
     {

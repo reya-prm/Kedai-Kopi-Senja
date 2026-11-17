@@ -14,6 +14,7 @@
             {{-- link buat manajer misal bahan, resep, dll --}}
             @if (auth()->user()->role === 'manajer')
                 <a href="{{ route('manajer.bahan.index') }}" class="text-gray-700 hover:text-blue-700">Bahan</a>
+                <a href="{{ route('manajer.bahan.low-stock') }}" class="text-gray-700 hover:text-blue-700">Bahan Menipis</a>
                 <a href="{{ route('manajer.menu.index') }}" class="text-gray-700 hover:text-blue-700">Menu</a>
                 <a href="{{ route('manajer.stok.index') }}" class="text-gray-700 hover:text-blue-700">Stok Masuk</a>
                 <a href="{{ route('password.edit') }}" class="text-gray-700 hover:text-blue-700">Ganti Password</a>

@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/bahan/{bahan}/edit', [BahanController::class, 'edit'])->name('bahan.edit');
         Route::put('/bahan/{bahan}', [BahanController::class, 'update'])->name('bahan.update');
         Route::delete('/bahan/{bahan}', [BahanController::class, 'destroy'])->name('bahan.destroy');
+        // ---- bahan menipis ----
+        Route::get('/bahan-menipis', [BahanController::class, 'lowStock'])->name('bahan.low-stock');
 
         // ---- menu ----
         Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');

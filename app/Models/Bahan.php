@@ -39,6 +39,19 @@ class Bahan extends Model
         return mb_strtolower(trim($nama));
     }
 
+    //nge filter stok yang menipis
+    public function scopeLowStock($query)
+    {
+        return $query->whereColumn('stok', '<=', 'batas_minimum');
+    }
+
+    //cek satu data stok barang menipis atau ga 
+    public function getIsLowStockAttribute(): bool
+    {
+        return round((float) $this->stok, 3) <= round((float) $this->batas_minimum, 3);
+    }
+
+
     public function resep(): HasMany
     {
         return $this->hasMany(Resep::class, 'bahan_id');

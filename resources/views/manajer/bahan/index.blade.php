@@ -16,7 +16,7 @@
                 <th class="px-6 py-3">Satuan</th>
                 <th class="px-6 py-3 text-right">Stok</th>
                 <th class="px-6 py-3 text-right">Batas minimum</th>
-                <th class="px-6 py-3"></th>
+                <th class="px-6 py-3">Status</th>
             </tr>
         </thead>
         <tbody>
@@ -27,10 +27,17 @@
                 {{-- (float) dipakai biar "300.000" tampil jadi "300" --}}
                 <td class="px-6 py-3 text-right">{{ (float) $b->stok }}</td>
                 <td class="px-6 py-3 text-right">{{ (float) $b->batas_minimum }}</td>
+                <td class="px-6 py-3">
+                    
+                    @if ($b->is_low_stock)
+                        <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Menipis</span>
+                    @endif
+                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Aman</span>
+                </td>
                 <td class="px-6 py-3 text-right whitespace-nowrap">
                     <a href="{{ route('manajer.bahan.edit', $b) }}" class="font-medium text-blue-700 hover:underline">Ubah</a>
                     <form method="POST" action="{{ route('manajer.bahan.destroy', $b) }}" class="inline ml-3"
-                          onsubmit="return confirm('Hapus bahan ini?')">
+                        onsubmit="return confirm('Hapus bahan ini?')">
                         @csrf
                         @method('DELETE')
                         <button class="font-medium text-red-600 hover:underline">Hapus</button>
