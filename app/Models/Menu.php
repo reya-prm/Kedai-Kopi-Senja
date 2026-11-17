@@ -46,4 +46,11 @@ class Menu extends Model
 
         return 'tersedia';
     }
+
+        // menu yang boleh ditampilin ke kasir: aktif DAN udah punya resep.
+    // yang nonaktif atau tanpa resep nggak muncul sama sekali
+    public function scopeForSale($query)
+    {
+        return $query->where('aktif', true)->has('resep');
+    }
 }

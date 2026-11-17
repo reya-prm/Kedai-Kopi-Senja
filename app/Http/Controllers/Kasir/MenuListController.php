@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 
 class MenuListController extends Controller
 {
-    public function index()
-    {   
-        // with('resep.bahan') dibutuhin buat ngitung status Habis, tapi resepnya nggak ditampilin ke kasir
+        public function index()
+    {
+        // forSale() = cuma menu aktif yang punya resep.
+        // with('resep.bahan') tetap dibutuhin buat ngitung status Habis, tapi resepnya nggak ditampilin ke kasir
         return view('kasir.menu.index', [
-            'items' => Menu::with('resep.bahan')->orderBy('nama')->get(),
+            'items' => Menu::forSale()->with('resep.bahan')->orderBy('nama')->get(),
         ]);
     }
 }

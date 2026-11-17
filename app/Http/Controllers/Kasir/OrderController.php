@@ -19,8 +19,9 @@ class OrderController extends Controller
 
     public function create()
     {
+        // sama kayak daftar menu: menu nonaktif nggak ditampilin di form pesanan
         return view('kasir.orders.create', [
-            'items' => Menu::with('resep.bahan')->orderBy('nama')->get(),
+            'items' => Menu::forSale()->with('resep.bahan')->orderBy('nama')->get(),
         ]);
     }
 
