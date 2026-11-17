@@ -120,4 +120,54 @@ class OrderService
             return $pesanan;
         });
     }
+
+        // ubah status harus berurutan: baru -> diproses -> selesai. loncat atau mundur ditolak
+    public function changeStatus(Pesanan $pesanan, string $target): Pesanan
+    {
+        return DB::transaction(function () use ($pesanan, $target) {
+            // ambil ulang + kunci barisnya, biar dua klik bersamaan nggak bikin status loncat
+            $pesanan = Pesanan::whereKey($pesanan->id)->lockForUpdate()->firstOrFail();
+
+            // peta langkah berikutnya yang boleh dari tiap status
+            $next = ['baru' => 'diproses', 'diproses' => 'selesai'];
+
+            if (($next[$pesanan->status] ?? null) !== $target) {
+                throw new OrderException("Status harus berurutan (Baru, Diproses, Selesai). Pesanan ini tidak bisa diubah dari {$pesanan->status} ke {$target}.");
+            }
+
+            $pesanan->update(['status' => $target]);
+
+            return $pesanan;
+        });
+    }
+
+    // batal cuma boleh pas status masih "baru". stok dikembalikan sebesar yang dulu BENAR-BENAR dipotong
+    public function cancelOrder(Pesanan $pesanan): Pesanan
+    {
+        return DB::transaction(function () use ($pesanan) {
+            $pesanan = Pesanan::whereKey($pesanan->id)->lockForUpdate()->firstOrFail();
+
+            if ($pesanan->status !== 'baru') {
+                throw new OrderException('Pesanan hanya bisa dibatalkan saat berstatus Baru.');
+            }
+
+            // ambil dari pemakaian_bahan (bukan dari resep sekarang), karena resep bisa aja udah diedit manajer
+            $usages = PemakaianBahan::whereIn('detail_pesanan_id', $pesanan->detail()->pluck('id'))->get();
+
+            // gabung per bahan
+            $totals = [];
+            foreach ($usages as $u) {
+                $totals[$u->bahan_id] = ($totals[$u->bahan_id] ?? 0) + (float) $u->jumlah;
+            }
+            ksort($totals);
+
+            foreach ($totals as $bahanId => $jumlah) {
+                Bahan::where('id', $bahanId)->increment('stok', round($jumlah, 3));
+            }
+
+            $pesanan->update(['status' => 'dibatalkan']);
+
+            return $pesanan;
+        });
+    }
 }

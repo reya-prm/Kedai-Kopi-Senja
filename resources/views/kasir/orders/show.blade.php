@@ -42,7 +42,31 @@
         <div class="flex justify-between pt-1 font-bold text-gray-900 border-t"><dt>Total</dt><dd>Rp{{ number_format($pesanan->total, 0, ',', '.') }}</dd></div>
     </dl>
 
-    {{-- tombol aksi status ditambah di fitur K3 --}}
+    {{-- tombol yang tampil cuma langkah yang valid. servernya tetap ngecek ulang --}}
+    @if ($pesanan->status === 'baru')
+        <div class="flex gap-3">
+            <form method="POST" action="{{ route('kasir.orders.status', $pesanan) }}">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="status" value="diproses">
+                <button class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5">Proses</button>
+            </form>
+
+            <form method="POST" action="{{ route('kasir.orders.cancel', $pesanan) }}"
+                onsubmit="return confirm('Batalkan pesanan ini? Stok akan dikembalikan.')">
+                @csrf
+                @method('PATCH')
+                <button class="text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5">Batalkan</button>
+            </form>
+        </div>
+    @elseif ($pesanan->status === 'diproses')
+        <form method="POST" action="{{ route('kasir.orders.status', $pesanan) }}">
+            @csrf
+            @method('PATCH')
+            <input type="hidden" name="status" value="selesai">
+            <button class="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-2.5">Selesai</button>
+        </form>
+    @endif
 
     <a href="{{ route('kasir.orders.index') }}" class="text-sm text-gray-600 hover:underline">Kembali ke daftar</a>
 </div>

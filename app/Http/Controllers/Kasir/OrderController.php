@@ -67,4 +67,29 @@ class OrderController extends Controller
     {
         return view('kasir.orders.show', ['pesanan' => $pesanan->load('detail', 'pembuat')]);
     }
+
+        public function updateStatus(Request $request, Pesanan $pesanan, OrderService $orders)
+    {
+        // dibatalkan sengaja nggak ada di sini, pembatalan punya jalur sendiri
+        $request->validate(['status' => ['required', 'in:diproses,selesai']]);
+
+        try {
+            $orders->changeStatus($pesanan, $request->status);
+        } catch (OrderException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return back()->with('success', 'Status pesanan diperbarui.');
+    }
+
+    public function cancel(Pesanan $pesanan, OrderService $orders)
+    {
+        try {
+            $orders->cancelOrder($pesanan);
+        } catch (OrderException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return back()->with('success', 'Pesanan dibatalkan dan stok dikembalikan.');
+    }
 }

@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function () {
 
     //khusus kasir
     Route::middleware('role:kasir')->prefix('kasir')->name('kasir.')->group(function (){
-        
+
         //menu
         Route::get('/menu', [MenuListController::class, 'index'])->name('menu.index');
 
@@ -72,6 +72,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/pesanan/buat', [OrderController::class, 'create'])->name('orders.create');
         Route::post('/pesanan', [OrderController::class, 'store'])->name('orders.store');
         Route::get('/pesanan/{pesanan}', [OrderController::class, 'show'])->name('orders.show');
+        Route::patch('/pesanan/{pesanan}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+        Route::patch('/pesanan/{pesanan}/batal', [OrderController::class, 'cancel'])->name('orders.cancel');
     });
 
     // rute uji sementara dari tahap login, dihapus nanti
