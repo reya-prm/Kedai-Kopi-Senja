@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\PasswordController;
 use App\Http\Controllers\Manajer\MenuController;
 use App\Http\Controllers\Manajer\StokMasukController;
 use App\Http\Controllers\Kasir\MenuListController;
+use App\Http\Controllers\Kasir\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -62,7 +63,15 @@ Route::middleware('auth')->group(function () {
 
     //khusus kasir
     Route::middleware('role:kasir')->prefix('kasir')->name('kasir.')->group(function (){
+        
+        //menu
         Route::get('/menu', [MenuListController::class, 'index'])->name('menu.index');
+
+        //pesanan
+        Route::get('/pesanan', [OrderController::class, 'index'])->name('orders.index');
+        Route::get('/pesanan/buat', [OrderController::class, 'create'])->name('orders.create');
+        Route::post('/pesanan', [OrderController::class, 'store'])->name('orders.store');
+        Route::get('/pesanan/{pesanan}', [OrderController::class, 'show'])->name('orders.show');
     });
 
     // rute uji sementara dari tahap login, dihapus nanti

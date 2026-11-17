@@ -24,6 +24,8 @@
             {{-- link buat kasir membuat pesanan, ubah status, dll --}}
             @if (auth()->user()->role === 'kasir')
                 <a href="{{ route('kasir.menu.index') }}" class="text-gray-700 hover:text-blue-700">Daftar Menu</a>
+                <a href="{{ route('kasir.orders.create') }}" class="text-gray-700 hover:text-blue-700">Buat Pesanan</a>
+                <a href="{{ route('kasir.orders.index') }}" class="text-gray-700 hover:text-blue-700">Pesanan</a>
             @endif
             
 

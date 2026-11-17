@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DetailPesanan extends Model
 {
-    protected $table = ['detail_pesanan'];
+    protected $table = 'detail_pesanan';
 
     protected $fillable = ['pesanan_id', 'menu_id', 'nama_menu', 'harga_satuan', 'jumlah', 'total_baris'];
 
