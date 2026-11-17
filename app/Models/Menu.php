@@ -11,7 +11,7 @@ class Menu extends Model
     // nama tabelnya "menu" (nggak jamak), jadi harus ditulis sendiri
     protected $table = 'menu';
 
-    protected $fillable = ['nama', 'kategori', 'harga', 'aktif'];
+    protected $fillable = ['kode','nama', 'kategori', 'harga', 'aktif'];
 
     protected function casts(): array
     {
