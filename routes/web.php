@@ -3,6 +3,7 @@
 use App\Http\Controllers\Manajer\BahanController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\LoginController;
+use App\Http\Controllers\Web\PasswordController;
 use App\Http\Controllers\Manajer\MenuController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,8 +19,10 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/password', [PasswordController::class, 'edit'])->name('password.edit');
+    Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
 
-    // khusus manajer. prefix = awalan URL (/manajer/...), name = awalan nama rute (manajer....)
+    // khusus manajer
     Route::middleware('role:manajer')->prefix('manajer')->name('manajer.')->group(function () {
 
         // ---- bahan ----

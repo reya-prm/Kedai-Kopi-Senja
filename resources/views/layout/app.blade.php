@@ -15,6 +15,7 @@
             @if (auth()->user()->role === 'manajer')
                 <a href="{{ route('manajer.bahan.index') }}" class="text-gray-700 hover:text-blue-700">Bahan</a>
                 <a href="{{ route('manajer.menu.index') }}" class="text-gray-700 hover:text-blue-700">Menu</a>
+                <a href="{{ route('password.edit') }}" class="text-gray-700 hover:text-blue-700">Ganti Password</a>
             @endif
             
 
