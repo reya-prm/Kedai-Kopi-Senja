@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Manajer\BahanController;
+use App\Http\Controllers\Manajer\LaporanController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\LoginController;
 use App\Http\Controllers\Web\PasswordController;
@@ -30,7 +31,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/bahan', [BahanController::class, 'index'])->name('bahan.index');
         Route::get('/bahan/create', [BahanController::class, 'create'])->name('bahan.create');
         Route::post('/bahan', [BahanController::class, 'store'])->name('bahan.store');
-        // {bahan} = id di URL, Laravel otomatis nyari datanya dan ngirim ke $bahan di controller
         Route::get('/bahan/{bahan}/edit', [BahanController::class, 'edit'])->name('bahan.edit');
         Route::put('/bahan/{bahan}', [BahanController::class, 'update'])->name('bahan.update');
         Route::delete('/bahan/{bahan}', [BahanController::class, 'destroy'])->name('bahan.destroy');
@@ -53,6 +53,10 @@ Route::middleware('auth')->group(function () {
         // ---- stok masuk ----
         Route::get('/stok-masuk', [StokMasukController::class, 'index'])->name('stok.index');
         Route::post('/stok-masuk', [StokMasukController::class, 'store'])->name('stok.store');
+
+        // ---- laporan ----
+        Route::get('/laporan/margin', [LaporanController::class, 'margin'])->name('laporan.margin');
+        Route::get('/laporan/penjualan', [LaporanController::class, 'penjualan'])->name('laporan.penjualan');
     });
 
     // rute uji sementara dari tahap login, dihapus nanti
