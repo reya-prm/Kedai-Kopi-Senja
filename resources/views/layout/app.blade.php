@@ -14,7 +14,9 @@
             {{-- link buat manajer misal bahan, resep, dll --}}
             @if (auth()->user()->role === 'manajer')
                 <a href="{{ route('manajer.bahan.index') }}" class="text-gray-700 hover:text-blue-700">Bahan</a>
+                <a href="{{ route('manajer.menu.index') }}" class="text-gray-700 hover:text-blue-700">Menu</a>
             @endif
+            
 
             <div class="ml-auto flex items-center gap-4">
                 <span class="text-gray-500">{{ auth()->user()->name }} · {{ auth()->user()->role }}</span>

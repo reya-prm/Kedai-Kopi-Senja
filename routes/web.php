@@ -3,6 +3,7 @@
 use App\Http\Controllers\Manajer\BahanController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\LoginController;
+use App\Http\Controllers\Manajer\MenuController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -29,6 +30,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/bahan/{bahan}/edit', [BahanController::class, 'edit'])->name('bahan.edit');
         Route::put('/bahan/{bahan}', [BahanController::class, 'update'])->name('bahan.update');
         Route::delete('/bahan/{bahan}', [BahanController::class, 'destroy'])->name('bahan.destroy');
+
+        // ---- menu ----
+        Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
+        Route::get('/menu/create', [MenuController::class, 'create'])->name('menu.create');
+        Route::post('/menu', [MenuController::class, 'store'])->name('menu.store');
+        Route::get('/menu/{menu}/edit', [MenuController::class, 'edit'])->name('menu.edit');
+        Route::put('/menu/{menu}', [MenuController::class, 'update'])->name('menu.update');
+        Route::delete('/menu/{menu}', [MenuController::class, 'destroy'])->name('menu.destroy');
+        Route::patch('/menu/{menu}/toggle', [MenuController::class, 'toggleActive'])->name('menu.toggle');
     });
 
     // rute uji sementara dari tahap login, dihapus nanti
