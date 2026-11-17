@@ -39,6 +39,10 @@ Route::middleware('auth')->group(function () {
         Route::put('/menu/{menu}', [MenuController::class, 'update'])->name('menu.update');
         Route::delete('/menu/{menu}', [MenuController::class, 'destroy'])->name('menu.destroy');
         Route::patch('/menu/{menu}/toggle', [MenuController::class, 'toggleActive'])->name('menu.toggle');
+
+        // ---- resep (diatur dari halaman ubah menu) ----
+        Route::post('/menu/{menu}/recipe', [MenuController::class, 'storeRecipe'])->name('menu.recipe.store');
+        Route::delete('/menu/{menu}/recipe/{resep}', [MenuController::class, 'destroyRecipe'])->name('menu.recipe.destroy');
     });
 
     // rute uji sementara dari tahap login, dihapus nanti

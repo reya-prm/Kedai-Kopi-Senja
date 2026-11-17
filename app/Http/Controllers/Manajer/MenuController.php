@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Manajer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
+use App\Models\Bahan;
+use App\Models\Resep;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
@@ -45,7 +47,10 @@ class MenuController extends Controller
     // $menu keisi otomatis dari id di URL, kalau id-nya nggak ada langsung 404
     public function edit(Menu $menu)
     {
-        return view('manajer.menu.form', compact('menu'));
+        return view('manajer.menu.form', [
+            'menu' => $menu,
+            'ingredients' => Bahan::orderBy('nama')->get(), // buat pilihan bahan di form resep
+        ]);
     }
 
     public function update(Request $request, Menu $menu)
@@ -93,5 +98,54 @@ class MenuController extends Controller
         }
 
         return back()->with('success', 'Menu dihapus.');
+    }
+
+        // ---- resep ----
+
+    public function storeRecipe(Request $request, Menu $menu)
+    {
+        $data = $request->validate([
+            'bahan_id' => ['required', 'exists:bahan,id'],
+            // gt:0 = harus lebih dari nol, decimal:0,3 = maksimal 3 angka di belakang koma
+            'takaran' => ['required', 'numeric', 'gt:0', 'decimal:0,3', 'max:99999999'],
+        ]);
+
+        // cari dulu: bahan ini udah ada di resep menu ini atau belum
+        $resep = Resep::where('menu_id', $menu->id)
+            ->where('bahan_id', $data['bahan_id'])
+            ->first();
+
+        if ($resep) {
+            // udah ada -> takarannya aja yang diganti, jadi nggak ada bahan dobel
+            $resep->update(['takaran' => $data['takaran']]);
+        } else {
+            // belum ada -> bikin baris baru
+            Resep::create([
+                'menu_id' => $menu->id,
+                'bahan_id' => $data['bahan_id'],
+                'takaran' => $data['takaran'],
+            ]);
+        }
+
+        return back()->with('success', 'Resep disimpan.');
+    }
+
+    public function destroyRecipe(Menu $menu, Resep $resep)
+    {
+        // jaga-jaga: URL /menu/1/recipe/99 nggak boleh bisa ngapus resep milik menu lain
+        if ($resep->menu_id !== $menu->id) {
+            abort(404);
+        }
+
+        $resep->delete();
+
+        // resep habis -> menu otomatis nonaktif, biar nggak bisa dipesan tanpa resep
+        if ($menu->aktif && ! $menu->resep()->exists()) {
+            $menu->update(['aktif' => false]);
+
+            return back()->with('success', 'Bahan dihapus dari resep. Menu dinonaktifkan karena resepnya kosong.');
+        }
+
+        return back()->with('success', 'Bahan dihapus dari resep.');
     }
 }
