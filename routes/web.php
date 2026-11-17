@@ -5,6 +5,7 @@ use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\LoginController;
 use App\Http\Controllers\Web\PasswordController;
 use App\Http\Controllers\Manajer\MenuController;
+use App\Http\Controllers\Manajer\StokMasukController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -46,6 +47,10 @@ Route::middleware('auth')->group(function () {
         // ---- resep (diatur dari halaman ubah menu) ----
         Route::post('/menu/{menu}/recipe', [MenuController::class, 'storeRecipe'])->name('menu.recipe.store');
         Route::delete('/menu/{menu}/recipe/{resep}', [MenuController::class, 'destroyRecipe'])->name('menu.recipe.destroy');
+
+        // ---- stok masuk ----
+        Route::get('/stok-masuk', [StokMasukController::class, 'index'])->name('stok.index');
+        Route::post('/stok-masuk', [StokMasukController::class, 'store'])->name('stok.store');
     });
 
     // rute uji sementara dari tahap login, dihapus nanti
