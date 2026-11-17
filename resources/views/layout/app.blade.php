@@ -20,6 +20,11 @@
                 <a href="{{ route('manajer.laporan.margin') }}" class="text-gray-700 hover:text-blue-700">Laporan</a>
                 <a href="{{ route('password.edit') }}" class="text-gray-700 hover:text-blue-700">Ganti Password</a>
             @endif
+
+            {{-- link buat kasir membuat pesanan, ubah status, dll --}}
+            @if (auth()->user()->role === 'kasir')
+                <a href="{{ route('kasir.menu.index') }}" class="text-gray-700 hover:text-blue-700">Daftar Menu</a>
+            @endif
             
 
             <div class="ml-auto flex items-center gap-4">

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use phpDocumentor\Reflection\Types\Float_;
 
 class Menu extends Model
 {
@@ -22,5 +23,27 @@ class Menu extends Model
     public function resep(): HasMany
     {
         return $this->hasMany(Resep::class, 'menu_id');
+    }
+
+    // status buat halaman kasir: tersedia / habis / nonaktif / tanpa_resep.
+    // DIHITUNG tiap halaman dibuka, nggak disimpan di database, jadi otomatis ikut stok terbaru.
+    public function getSalesStatusAttribute(): string
+    {
+        if(! $this->aktif) {
+            return 'nonaktif';
+        }
+
+        if($this->resep->isEmpty()){
+            return 'tanpa_resep';
+        }
+
+        // satu bahan aja yang stoknya kurang dari takaran 1 porsi, menu langsung Habis
+        foreach ($this->resep as $r){
+            if (round((float) $r->bahan->stok, 3) < round((float) $r->takaran, 3)){
+                return 'habis';
+            }
+        }
+
+        return 'tersedia';
     }
 }

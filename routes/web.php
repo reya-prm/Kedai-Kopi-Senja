@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\LoginController;
 use App\Http\Controllers\Web\PasswordController;
 use App\Http\Controllers\Manajer\MenuController;
 use App\Http\Controllers\Manajer\StokMasukController;
+use App\Http\Controllers\Kasir\MenuListController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -57,6 +58,11 @@ Route::middleware('auth')->group(function () {
         // ---- laporan ----
         Route::get('/laporan/margin', [LaporanController::class, 'margin'])->name('laporan.margin');
         Route::get('/laporan/penjualan', [LaporanController::class, 'penjualan'])->name('laporan.penjualan');
+    });
+
+    //khusus kasir
+    Route::middleware('role:kasir')->prefix('kasir')->name('kasir.')->group(function (){
+        Route::get('/menu', [MenuListController::class, 'index'])->name('menu.index');
     });
 
     // rute uji sementara dari tahap login, dihapus nanti
