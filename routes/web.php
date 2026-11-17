@@ -9,6 +9,7 @@ use App\Http\Controllers\Manajer\MenuController;
 use App\Http\Controllers\Manajer\StokMasukController;
 use App\Http\Controllers\Kasir\MenuListController;
 use App\Http\Controllers\Kasir\OrderController;
+use App\Http\Controllers\Kasir\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -74,6 +75,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/pesanan/{pesanan}', [OrderController::class, 'show'])->name('orders.show');
         Route::patch('/pesanan/{pesanan}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
         Route::patch('/pesanan/{pesanan}/batal', [OrderController::class, 'cancel'])->name('orders.cancel');
+
+        //ganti password
+        Route::get('/pelanggan', [CustomerController::class, 'index'])->name('customers.index');
+        Route::patch('/pelanggan/{user}/reset-password', [CustomerController::class, 'resetPassword'])->name('customers.reset');
     });
 
     // rute uji sementara dari tahap login, dihapus nanti
