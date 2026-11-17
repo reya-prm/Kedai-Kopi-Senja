@@ -31,14 +31,15 @@
         @error('harga') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
     </div>
 
-    <label class="flex items-center gap-2 text-sm text-gray-900">
-        {{-- old() kosong = form baru dibuka (menu baru otomatis aktif).
-             old() ada isinya = habis gagal validasi, ikutin pilihan terakhir user --}}
-        <input type="checkbox" name="aktif" value="1"
-               @checked(old() ? old('aktif') : ($menu->exists ? $menu->aktif : true))
-               class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300">
-        Menu aktif (bisa dipesan)
-    </label>
+    {{-- status nggak diubah lewat form ini, cuma info --}}
+    @if ($menu->exists)
+        <p class="text-sm text-gray-500">
+            Status: <strong>{{ $menu->aktif ? 'Aktif' : 'Nonaktif' }}</strong>
+            (diubah lewat tombol di daftar menu)
+        </p>
+    @else
+        <p class="text-sm text-gray-500">Menu baru otomatis nonaktif. Isi resep dulu, lalu aktifkan dari daftar menu.</p>
+    @endif
 
     <div class="flex items-center gap-3">
         <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">Simpan</button>

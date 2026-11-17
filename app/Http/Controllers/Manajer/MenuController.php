@@ -32,12 +32,14 @@ class MenuController extends Controller
             'harga' => ['required', 'integer', 'min:0', 'max:10000000'],
         ]);
 
-        // checkbox yang nggak dicentang nggak dikirim browser, jadi boolean() otomatis false
-        $data['aktif'] = $request->boolean('aktif');
+        // menu baru selalu nonaktif dulu, baru bisa diaktifin kalau udah punya resep
+        $data['aktif'] = false;
 
-        Menu::create($data);
+        $menu = Menu::create($data);
 
-        return redirect()->route('manajer.menu.index')->with('success', 'Menu berhasil ditambahkan.');
+        // langsung ke halaman ubah biar resepnya bisa diisi
+        return redirect()->route('manajer.menu.edit', $menu)
+            ->with('success', 'Menu dibuat dan masih nonaktif. Isi resepnya dulu, baru bisa diaktifkan.');
     }
 
     // $menu keisi otomatis dari id di URL, kalau id-nya nggak ada langsung 404
@@ -48,22 +50,28 @@ class MenuController extends Controller
 
     public function update(Request $request, Menu $menu)
     {
+        // aktif sengaja nggak ada di sini: statusnya cuma diubah lewat tombol Aktifkan/Nonaktifkan
         $data = $request->validate([
             'nama' => ['required', 'string', 'max:255'],
             'kategori' => ['nullable', 'string', 'max:100'],
             'harga' => ['required', 'integer', 'min:0', 'max:10000000'],
         ]);
 
-        $data['aktif'] = $request->boolean('aktif');
-
         $menu->update($data);
 
         return redirect()->route('manajer.menu.index')->with('success', 'Menu berhasil diperbarui.');
     }
 
+
     // tombol cepat buat nonaktifin atau aktifin menu dari halaman daftar
     public function toggleActive(Menu $menu)
     {
+        // mau diaktifin tapi belum ada resep -> tolak.
+        // dicek di server, jadi tetap aman walau ada yang kirim request langsung tanpa lewat tombol
+        if (! $menu->aktif && ! $menu->resep()->exists()) {
+            return back()->with('error', 'Menu belum punya resep, jadi belum bisa diaktifkan.');
+        }
+
         // kalau tadinya aktif jadi nonaktif, kalau tadinya nonaktif jadi aktif
         $menu->update(['aktif' => ! $menu->aktif]);
 
