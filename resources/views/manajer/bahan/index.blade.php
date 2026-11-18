@@ -8,6 +8,8 @@
        class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2">+ Tambah Bahan</a>
 </div>
 
+@include('manajer._supplier-info')
+
 <div class="relative overflow-x-auto bg-white border border-gray-200 rounded-lg shadow-sm">
     <table class="w-full text-sm text-left text-gray-500">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50">

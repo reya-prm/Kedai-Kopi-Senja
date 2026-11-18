@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\LoginController;
 use App\Http\Controllers\Web\PasswordController;
 use App\Http\Controllers\Manajer\MenuController;
 use App\Http\Controllers\Manajer\StokMasukController;
+use App\Http\Controllers\Manajer\SupplierController;
 use App\Http\Controllers\Kasir\MenuListController;
 use App\Http\Controllers\Kasir\OrderController;
 use App\Http\Controllers\Kasir\CustomerController;
@@ -30,17 +31,17 @@ Route::middleware('auth')->group(function () {
     // khusus manajer
     Route::middleware('role:manajer')->prefix('manajer')->name('manajer.')->group(function () {
 
-        // ---- bahan ----
+        //bahan
         Route::get('/bahan', [BahanController::class, 'index'])->name('bahan.index');
         Route::get('/bahan/create', [BahanController::class, 'create'])->name('bahan.create');
         Route::post('/bahan', [BahanController::class, 'store'])->name('bahan.store');
         Route::get('/bahan/{bahan}/edit', [BahanController::class, 'edit'])->name('bahan.edit');
         Route::put('/bahan/{bahan}', [BahanController::class, 'update'])->name('bahan.update');
         Route::delete('/bahan/{bahan}', [BahanController::class, 'destroy'])->name('bahan.destroy');
-        // ---- bahan menipis ----
+        //bahan menipis
         Route::get('/bahan-menipis', [BahanController::class, 'lowStock'])->name('bahan.low-stock');
 
-        // ---- menu ----
+        //menu
         Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
         Route::get('/menu/create', [MenuController::class, 'create'])->name('menu.create');
         Route::post('/menu', [MenuController::class, 'store'])->name('menu.store');
@@ -49,17 +50,20 @@ Route::middleware('auth')->group(function () {
         Route::delete('/menu/{menu}', [MenuController::class, 'destroy'])->name('menu.destroy');
         Route::patch('/menu/{menu}/toggle', [MenuController::class, 'toggleActive'])->name('menu.toggle');
 
-        // ---- resep (diatur dari halaman ubah menu) ----
+        //resep (diatur dari halaman ubah menu)
         Route::post('/menu/{menu}/recipe', [MenuController::class, 'storeRecipe'])->name('menu.recipe.store');
         Route::delete('/menu/{menu}/recipe/{resep}', [MenuController::class, 'destroyRecipe'])->name('menu.recipe.destroy');
 
-        // ---- stok masuk ----
+        //stok masuk
         Route::get('/stok-masuk', [StokMasukController::class, 'index'])->name('stok.index');
         Route::post('/stok-masuk', [StokMasukController::class, 'store'])->name('stok.store');
 
-        // ---- laporan ----
+        //laporan
         Route::get('/laporan/margin', [LaporanController::class, 'margin'])->name('laporan.margin');
         Route::get('/laporan/penjualan', [LaporanController::class, 'penjualan'])->name('laporan.penjualan');
+
+        //sinkron harga supplier
+        Route::post('/supplier/sync', [SupplierController::class, 'sync'])->name('supplier.sync');
     });
 
     //khusus kasir

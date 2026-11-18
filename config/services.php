@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+     // layanan Supplier (harga bahan)
+    'supplier' => [
+        'url' => env('SUPPLIER_URL'),
+        'key' => env('SUPPLIER_API_KEY'),
+    ],
+
 ];
