@@ -17,6 +17,7 @@
                 <th class="px-6 py-3">Nama</th>
                 <th class="px-6 py-3">Satuan</th>
                 <th class="px-6 py-3 text-right">Stok</th>
+                <th class="px-6 py-3 text-right">Harga/satuan</th>
                 <th class="px-6 py-3 text-right">Batas minimum</th>
                 <th class="px-6 py-3">Status</th>
             </tr>
@@ -28,6 +29,8 @@
                 <td class="px-6 py-3">{{ $b->satuan_dasar }}</td>
                 {{-- (float) dipakai biar "300.000" tampil jadi "300" --}}
                 <td class="px-6 py-3 text-right">{{ (float) $b->stok }}</td>
+                {{-- harga per satuan dasar: per g, per ml, atau per pcs sesuai kolom Satuan --}}
+                <td class="px-6 py-3 text-right">Rp{{ (float) $b->harga_per_satuan }}</td>
                 <td class="px-6 py-3 text-right">{{ (float) $b->batas_minimum }}</td>
                 <td class="px-6 py-3">
                 {{-- is_low_stock datang dari accessor di model Bahan --}}
