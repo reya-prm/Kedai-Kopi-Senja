@@ -148,4 +148,29 @@ class MenuController extends Controller
 
         return back()->with('success', 'Bahan dihapus dari resep.');
     }
+
+    // halaman ringkasan: semua menu beserta SEMUA bahannya dalam satu tabel
+    public function recipeIndex()
+    {
+        // with('resep.bahan') narik resep + nama bahannya sekalian (sekali query, bukan per menu)
+        return view('manajer.resep.index', [
+            'items' => Menu::with('resep.bahan')->orderBy('nama')->get(),
+        ]);
+    }
+
+    // hapus SEMUA bahan di resep satu menu sekaligus
+    public function clearRecipe(Menu $menu)
+    {
+        // pesanan lama aman: bahan yang dulu dipotong udah kesimpan sendiri di pemakaian_bahan
+        $menu->resep()->delete();
+
+        // nggak punya resep = nggak boleh aktif
+        if ($menu->aktif) {
+            $menu->update(['aktif' => false]);
+
+            return back()->with('success', "Resep {$menu->nama} dihapus. Menu dinonaktifkan karena belum punya resep.");
+        }
+
+        return back()->with('success', "Resep {$menu->nama} dihapus.");
+    }
 }

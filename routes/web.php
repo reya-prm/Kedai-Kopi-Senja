@@ -53,6 +53,9 @@ Route::middleware('auth')->group(function () {
         //resep (diatur dari halaman ubah menu)
         Route::post('/menu/{menu}/recipe', [MenuController::class, 'storeRecipe'])->name('menu.recipe.store');
         Route::delete('/menu/{menu}/recipe/{resep}', [MenuController::class, 'destroyRecipe'])->name('menu.recipe.destroy');
+        // ringkasan resep semua menu + hapus seluruh resep satu menu
+        Route::get('/resep', [MenuController::class, 'recipeIndex'])->name('resep.index');
+        Route::delete('/menu/{menu}/recipe', [MenuController::class, 'clearRecipe'])->name('menu.recipe.clear');
 
         //stok masuk
         Route::get('/stok-masuk', [StokMasukController::class, 'index'])->name('stok.index');
