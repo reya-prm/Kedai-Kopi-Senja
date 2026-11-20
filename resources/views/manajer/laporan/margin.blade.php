@@ -14,10 +14,6 @@
             class="px-4 py-2 text-sm font-medium rounded-lg bg-white text-gray-700 border border-gray-300 hover:bg-gray-50">
             Penjualan per Menu
         </a>
-        <a href="{{ route('manajer.bahan.low-stock') }}"
-            class="px-4 py-2 text-sm font-medium rounded-lg bg-white text-gray-700 border border-gray-300 hover:bg-gray-50">
-            Bahan Menipis
-        </a>
     </div>
 
     <div class="flex items-center justify-between mb-4">
