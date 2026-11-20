@@ -16,10 +16,10 @@
             <div class="flex flex-wrap items-center gap-1">
                 {{-- link buat manajer misal bahan, resep, dll --}}
                 @if (auth()->user()->role === 'manajer')
-                    <a href="{{ route('manajer.bahan.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Bahan</a>
-                    <a href="{{ route('manajer.menu.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Menu</a>
-                    <a href="{{ route('manajer.resep.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Resep</a>
-                    <a href="{{ route('manajer.stok.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Stok Masuk</a>
+                    <a href="{{ route('manajer.bahan.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Kelola Bahan</a>
+                    <a href="{{ route('manajer.menu.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Kelola Menu</a>
+                    <a href="{{ route('manajer.resep.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Kelola Resep</a>
+                    <a href="{{ route('manajer.stok.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Kelola Stok Masuk</a>
                     <a href="{{ route('manajer.laporan.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Laporan</a>
                     <a href="{{ route('manajer.bahan.low-stock') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Bahan Menipis</a>
                     <a href="{{ route('password.edit') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Ganti Password</a>
@@ -29,8 +29,8 @@
                 @if (auth()->user()->role === 'kasir')
                     <a href="{{ route('kasir.menu.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Daftar Menu</a>
                     <a href="{{ route('kasir.orders.create') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Buat Pesanan</a>
-                    <a href="{{ route('kasir.orders.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Pesanan</a>
-                    <a href="{{ route('kasir.customers.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Pelanggan</a>
+                    <a href="{{ route('kasir.orders.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Kelola Pesanan</a>
+                    <a href="{{ route('kasir.customers.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Reset Password Pelanggan</a>
                 @endif
             </div>
 
