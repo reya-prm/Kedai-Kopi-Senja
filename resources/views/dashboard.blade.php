@@ -2,14 +2,8 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm space-y-3">
+    <div class="p-6 space-y-1 bg-white border border-gray-200 rounded-lg shadow-sm">
         <h1 class="text-xl font-bold">Halo, {{ auth()->user()->name }}</h1>
         <p class="text-sm text-gray-500">Login berhasil sebagai {{ auth()->user()->role }}.</p>
-
-        {{-- link uji sementara buat ngecek pembatasan role, nanti dihapus --}}
-        <ul class="text-sm text-blue-700 list-disc pl-5">
-            <li><a href="{{ route('test.manajer') }}" class="hover:underline">Area Manajer</a></li>
-            <li><a href="{{ route('test.kasir') }}" class="hover:underline">Area Kasir</a></li>
-        </ul>
     </div>
 @endsection

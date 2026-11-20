@@ -10,14 +10,4 @@ class DashboardController extends Controller
     {
         return view('dashboard');
     }
-
-    public function testManajer()
-    {
-        return 'Area Manajer';
-    }
-
-    public function testKasir()
-    {
-        return 'Area Kasir';
-    }
 }

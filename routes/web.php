@@ -11,6 +11,7 @@ use App\Http\Controllers\Manajer\SupplierController;
 use App\Http\Controllers\Kasir\MenuListController;
 use App\Http\Controllers\Kasir\OrderController;
 use App\Http\Controllers\Kasir\CustomerController;
+use App\Http\Controllers\Manajer\SalesReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -64,6 +65,7 @@ Route::middleware('auth')->group(function () {
         //laporan
         Route::get('/laporan/margin', [LaporanController::class, 'margin'])->name('laporan.margin');
         Route::get('/laporan/penjualan', [LaporanController::class, 'penjualan'])->name('laporan.penjualan');
+        Route::get('/laporan/penjualan-menu', [SalesReportController::class, 'index'])->name('report.sales');
 
         //sinkron harga supplier
         Route::post('/supplier/sync', [SupplierController::class, 'sync'])->name('supplier.sync');
