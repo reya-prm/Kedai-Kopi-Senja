@@ -28,4 +28,11 @@ class Pesanan extends Model
             return $this->hasMany(DetailPesanan::class, 'pesanan_id');
         }
 
+        // nomor struk: id pesanan diisi nol di depan, misal STR-000042.
+        // dibikin di model biar REST API nanti bisa pakai yang sama
+        public function getReceiptNumberAttribute(): string
+        {
+            return 'STR-' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
+        }
+
 }

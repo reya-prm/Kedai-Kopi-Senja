@@ -42,6 +42,11 @@
         <div class="flex justify-between pt-1 font-bold text-gray-900 border-t"><dt>Total</dt><dd>Rp{{ number_format($pesanan->total, 0, ',', '.') }}</dd></div>
     </dl>
 
+    <a href="{{ route('kasir.orders.receipt', $pesanan) }}" target="_blank"
+    class="inline-block text-blue-700 border border-blue-700 hover:bg-blue-50 font-medium rounded-lg text-sm px-5 py-2.5">
+        Lihat Struk
+    </a>
+
     {{-- tombol yang tampil cuma langkah yang valid. servernya tetap ngecek ulang --}}
     @if ($pesanan->status === 'baru')
         <div class="flex gap-3">

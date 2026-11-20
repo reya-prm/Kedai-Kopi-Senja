@@ -93,4 +93,13 @@ class OrderController extends Controller
 
         return back()->with('success', 'Pesanan dibatalkan dan stok dikembalikan.');
     }
+
+    // halaman struk yang siap dicetak
+    public function receipt(Pesanan $pesanan)
+    {
+        // load() narik detail item + nama kasir + nama pelanggan (kalau ada) sekalian
+        return view('kasir.orders.receipt', [
+            'pesanan' => $pesanan->load('detail', 'pembuat', 'pelanggan'),
+        ]);
+    }
 }

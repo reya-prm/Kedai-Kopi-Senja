@@ -80,6 +80,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/pesanan/buat', [OrderController::class, 'create'])->name('orders.create');
         Route::post('/pesanan', [OrderController::class, 'store'])->name('orders.store');
         Route::get('/pesanan/{pesanan}', [OrderController::class, 'show'])->name('orders.show');
+        Route::get('/pesanan/{pesanan}/struk', [OrderController::class, 'receipt'])->name('orders.receipt');
         Route::patch('/pesanan/{pesanan}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
         Route::patch('/pesanan/{pesanan}/batal', [OrderController::class, 'cancel'])->name('orders.cancel');
 
