@@ -9,15 +9,16 @@ use App\Http\Controllers\Manajer\MenuController;
 use App\Http\Controllers\Manajer\StokMasukController;
 use App\Http\Controllers\Manajer\SupplierController;
 use App\Http\Controllers\Web\LoginController;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Web\PasswordController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    if (auth()->guest()) {
+    if (Auth::guest()) {
         return redirect()->route('login');
     }
 
-    return match (auth()->user()->role) {
+    return match (Auth::user()->role) {
         'manajer' => redirect()->route('manajer.bahan.index'),
         'kasir' => redirect()->route('kasir.menu.index'),
         default => abort(403),

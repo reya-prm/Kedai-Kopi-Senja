@@ -7,8 +7,7 @@
     <div>
         <h1 class="text-2xl font-bold text-gray-900">Laporan Keseluruhan</h1>
         <p class="mt-1 text-sm text-gray-600">
-            Ringkasan penjualan untuk pesanan selesai pada {{ $from }} sampai {{ $to }}.
-            Pesanan baru, diproses, dan dibatalkan tidak dihitung.
+            Ringkasan penjualan untuk pesanan.
         </p>
     </div>
 
@@ -39,7 +38,7 @@
             <p class="mt-1 text-xs text-blue-800">Belum termasuk service dan pajak</p>
         </article>
         <article class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p class="text-sm font-medium text-gray-600">Total Tagihan</p>
+            <p class="text-sm font-medium text-gray-600">Total Pendapatan</p>
             <p class="mt-2 text-2xl font-bold tabular-nums text-gray-900">Rp {{ number_format($summary->total_billed, 0, ',', '.') }}</p>
             <p class="mt-1 text-xs text-gray-500">Termasuk service dan pajak</p>
         </article>
