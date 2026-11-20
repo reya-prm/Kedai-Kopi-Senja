@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Manajer;
 
 use App\Http\Controllers\Controller;
-use App\Models\Menu;
 use App\Models\Bahan;
+use App\Models\Menu;
 use App\Models\Resep;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
@@ -67,7 +66,6 @@ class MenuController extends Controller
         return redirect()->route('manajer.menu.index')->with('success', 'Menu berhasil diperbarui.');
     }
 
-
     // tombol cepat buat nonaktifin atau aktifin menu dari halaman daftar
     public function toggleActive(Menu $menu)
     {
@@ -83,24 +81,7 @@ class MenuController extends Controller
         return back()->with('success', $menu->aktif ? 'Menu diaktifkan.' : 'Menu dinonaktifkan.');
     }
 
-    public function destroy(Menu $menu)
-    {
-        try {
-            $menu->delete(); // resepnya ikut kehapus otomatis (cascade)
-        } catch (QueryException $e) {
-            // 23000 = database nolak karena menu udah pernah dipesan.
-            // sarannya nonaktifin aja. error jenis lain tetap dilempar biar ketahuan
-            if ($e->getCode() !== '23000') {
-                throw $e;
-            }
-
-            return back()->with('error', 'Menu sudah pernah dipesan jadi tidak bisa dihapus. Nonaktifkan saja.');
-        }
-
-        return back()->with('success', 'Menu dihapus.');
-    }
-
-        // ---- resep ----
+    // ---- resep ----
 
     public function storeRecipe(Request $request, Menu $menu)
     {

@@ -3,67 +3,89 @@
 
 @section('content')
 <div>
-    <h1 class="text-2xl font-bold text-gray-900">Resep per Menu</h1>
-    <p class="mt-1 text-sm text-gray-500">Komposisi bahan dan takaran untuk setiap menu.</p>
+    <h1 class="text-2xl font-bold text-gray-900">Resep Menu</h1>
+    <p class="mt-1 text-sm text-gray-500">Takaran bahan di bawah ini berlaku untuk satu porsi. Menu tanpa resep belum bisa diaktifkan.</p>
 </div>
 
-<div class="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
-    <table class="w-full text-left text-sm text-gray-600">
-        <thead class="bg-gray-50 text-xs uppercase text-gray-700">
-            <tr>
-                <th class="px-5 py-3">Menu</th>
-                <th class="px-5 py-3">Bahan</th>
-                <th class="px-5 py-3 text-right">Takaran / porsi</th>
-                <th class="px-5 py-3 text-right">Aksi</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100">
-        @foreach ($items as $m)
-            @forelse ($m->resep as $r)
-                <tr class="transition-colors hover:bg-gray-50">
-                    @if ($loop->first)
-                        {{-- sel menu cuma ditulis di baris pertama. rowspan bikin dia "melebar"
-                             sepanjang jumlah bahannya, jadi satu menu = satu blok --}}
-                        <td rowspan="{{ $m->resep->count() }}" class="border-r border-gray-200 bg-gray-50 px-5 py-3 align-top">
-                            <p class="font-medium text-gray-900">{{ $m->nama }}</p>
-                            <p class="text-xs">{{ $m->kategori ?? '-' }} · {{ $m->aktif ? 'Aktif' : 'Nonaktif' }}</p>
-                            <div class="flex items-center gap-3 mt-1 text-xs">
-                                <a href="{{ route('manajer.menu.edit', $m) }}" class="font-medium text-blue-700 hover:underline">Ubah resep</a>
-                                <form method="POST" action="{{ route('manajer.menu.recipe.clear', $m) }}"
-                                      onsubmit="return confirm('Hapus SEMUA bahan di resep menu ini?')">
+<div class="space-y-4">
+    @forelse ($items as $m)
+        <section class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-4 p-5">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <h2 class="text-lg font-semibold text-gray-900">{{ $m->nama }}</h2>
+                        @if ($m->aktif)
+                            <span class="inline-flex rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800">Aktif</span>
+                        @else
+                            <span class="inline-flex rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">Nonaktif</span>
+                        @endif
+                    </div>
+                    <p class="mt-1 text-sm text-gray-500">{{ $m->kategori ?? 'Tanpa kategori' }}</p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                    @if ($m->resep->isNotEmpty())
+                        <span class="text-sm text-gray-600">{{ $m->resep->count() }} bahan</span>
+                    @endif
+                    <a href="{{ route('manajer.menu.edit', $m) }}"
+                       class="rounded-lg border border-blue-200 px-3 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50">
+                        {{ $m->resep->isEmpty() ? 'Isi resep' : 'Atur resep' }}
+                    </a>
+                </div>
+            </div>
+
+            @if ($m->resep->isNotEmpty())
+                <div class="border-t border-gray-200">
+                    <div class="flex flex-wrap items-center justify-between gap-2 bg-gray-50 px-5 py-3">
+                        <h3 class="text-sm font-semibold text-gray-800">Bahan untuk satu porsi</h3>
+                        <span class="text-xs text-gray-500">Takaran ditampilkan bersama satuannya</span>
+                    </div>
+
+                    <ul class="divide-y divide-gray-100">
+                        @foreach ($m->resep as $r)
+                            <li class="flex flex-wrap items-center justify-between gap-3 px-5 py-3">
+                                <div>
+                                    <p class="font-medium text-gray-900">{{ $r->bahan->nama }}</p>
+                                    <p class="mt-0.5 text-sm text-gray-600">
+                                        {{ (float) $r->takaran }} {{ $r->bahan->satuan_dasar }} per porsi
+                                    </p>
+                                </div>
+                                <form method="POST" action="{{ route('manajer.menu.recipe.destroy', [$m, $r]) }}"
+                                      onsubmit="return confirm('Hapus bahan ini dari resep?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="font-medium text-red-600 hover:underline">Hapus resep</button>
+                                    <button class="rounded-lg px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50">
+                                        Hapus dari resep
+                                    </button>
                                 </form>
-                            </div>
-                        </td>
-                    @endif
+                            </li>
+                        @endforeach
+                    </ul>
 
-                    <td class="px-5 py-2 text-gray-900">{{ $r->bahan->nama }}</td>
-                    {{-- (float) biar "18.000" tampil jadi "18" --}}
-                    <td class="px-5 py-2 text-right tabular-nums">{{ (float) $r->takaran }} {{ $r->bahan->satuan_dasar }}</td>
-                    <td class="px-5 py-2 text-right">
-                        <form method="POST" action="{{ route('manajer.menu.recipe.destroy', [$m, $r]) }}"
-                              onsubmit="return confirm('Hapus bahan ini dari resep?')">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 bg-gray-50 px-5 py-4">
+                        <p class="text-xs text-gray-500">Jika semua bahan dihapus, menu yang aktif akan dinonaktifkan.</p>
+                        <form method="POST" action="{{ route('manajer.menu.recipe.clear', $m) }}"
+                              onsubmit="return confirm('Kosongkan semua bahan dari resep ini? Menu aktif akan dinonaktifkan.')">
                             @csrf
                             @method('DELETE')
-                            <button class="font-medium text-red-600 hover:underline">Hapus</button>
+                            <button class="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50">
+                                Kosongkan resep
+                            </button>
                         </form>
-                    </td>
-                </tr>
-            @empty
-                {{-- menu tanpa resep tetap tampil, biar manajer tau mana yang belum diisi --}}
-                <tr class="transition-colors hover:bg-gray-50">
-                    <td class="border-r border-gray-200 bg-gray-50 px-5 py-3 align-top">
-                        <p class="font-medium text-gray-900">{{ $m->nama }}</p>
-                        <p class="text-xs">{{ $m->kategori ?? '-' }} · {{ $m->aktif ? 'Aktif' : 'Nonaktif' }}</p>
-                        <a href="{{ route('manajer.menu.edit', $m) }}" class="text-xs font-medium text-blue-700 hover:underline">Isi resep</a>
-                    </td>
-                    <td colspan="3" class="px-5 py-3 text-amber-700">Belum ada resep. Menu ini belum bisa dipesan.</td>
-                </tr>
-            @endforelse
-        @endforeach
-        </tbody>
-    </table>
+                    </div>
+                </div>
+            @else
+                <div class="border-t border-amber-200 bg-amber-50 px-5 py-4">
+                    <p class="font-medium text-amber-900">Resep belum memiliki bahan.</p>
+                    <p class="mt-1 text-sm text-amber-800">Tambahkan bahan dan takaran per porsi agar menu dapat diaktifkan.</p>
+                </div>
+            @endif
+        </section>
+    @empty
+        <div class="rounded-xl border border-gray-200 bg-white px-5 py-10 text-center shadow-sm">
+            <p class="font-medium text-gray-900">Belum ada menu untuk ditampilkan.</p>
+            <p class="mt-1 text-sm text-gray-500">Buat menu terlebih dahulu, lalu tambahkan bahan resepnya.</p>
+        </div>
+    @endforelse
 </div>
 @endsection

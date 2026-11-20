@@ -48,12 +48,6 @@
                 </td>
                 <td class="whitespace-nowrap px-5 py-3 text-right">
                     <a href="{{ route('manajer.bahan.edit', $b) }}" class="font-medium text-blue-700 hover:underline">Ubah</a>
-                    <form method="POST" action="{{ route('manajer.bahan.destroy', $b) }}" class="inline ml-3"
-                        onsubmit="return confirm('Hapus bahan ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button class="font-medium text-red-600 hover:underline">Hapus</button>
-                    </form>
                 </td>
             </tr>
         @empty

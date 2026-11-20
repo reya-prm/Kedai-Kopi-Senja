@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Manajer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bahan;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class BahanController extends Controller
@@ -15,7 +14,7 @@ class BahanController extends Controller
         return view('manajer.bahan.index', ['items' => Bahan::orderBy('nama')->get()]);
     }
 
-    //daftar bahan yg stoknya dibawah atau sama dngn batas minimum
+    // daftar bahan yg stoknya dibawah atau sama dngn batas minimum
     public function lowStock()
     {
         return view('manajer.bahan.low-stock', [
@@ -78,22 +77,5 @@ class BahanController extends Controller
         $bahan->update($data);
 
         return redirect()->route('manajer.bahan.index')->with('success', 'Bahan berhasil diperbarui.');
-    }
-
-    public function destroy(Bahan $bahan)
-    {
-        try {
-            $bahan->delete();
-        } catch (QueryException $e) {
-            // 23000 = database nolak karena bahan masih dipakai di resep atau riwayat stok.
-            // error jenis lain tetap dilempar biar ketahuan kalau ada masalah beneran
-            if ($e->getCode() !== '23000') {
-                throw $e;
-            }
-
-            return back()->with('error', 'Bahan tidak bisa dihapus karena masih dipakai di resep atau riwayat stok.');
-        }
-
-        return back()->with('success', 'Bahan dihapus.');
     }
 }

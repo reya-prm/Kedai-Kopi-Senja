@@ -52,13 +52,6 @@
                         @method('PATCH')
                         <button class="font-medium text-amber-600 hover:underline">{{ $m->aktif ? 'Nonaktifkan' : 'Aktifkan' }}</button>
                     </form>
-
-                    <form method="POST" action="{{ route('manajer.menu.destroy', $m) }}" class="inline ml-3"
-                          onsubmit="return confirm('Hapus menu ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button class="font-medium text-red-600 hover:underline">Hapus</button>
-                    </form>
                 </td>
             </tr>
         @empty

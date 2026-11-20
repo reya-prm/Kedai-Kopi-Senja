@@ -53,44 +53,55 @@
 @if ($menu->exists)
 <section class="mt-5 max-w-2xl space-y-5 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
     <div>
-        <h2 class="text-lg font-bold text-gray-900">Resep</h2>
-        <p class="mt-1 text-sm text-gray-500">Takaran bahan untuk satu porsi.</p>
+        <h2 class="text-lg font-bold text-gray-900">Atur Resep</h2>
+        <p class="mt-1 text-sm text-gray-500">Masukkan bahan dan takaran yang digunakan untuk membuat satu porsi menu ini.</p>
     </div>
 
-    <div class="overflow-x-auto">
-    <table class="w-full text-left text-sm text-gray-600">
-        <thead class="bg-gray-50 text-xs uppercase text-gray-700">
-            <tr>
-                <th class="px-3 py-2">Bahan</th>
-                <th class="px-3 py-2 text-right">Takaran</th>
-                <th class="px-3 py-2 text-right">Aksi</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100">
-        @forelse ($menu->resep as $r)
-            <tr class="hover:bg-gray-50">
-                <td class="px-3 py-2 font-medium text-gray-900">{{ $r->bahan->nama }}</td>
-                {{-- (float) biar "18.000" tampil jadi "18" --}}
-                <td class="px-3 py-2 text-right tabular-nums">{{ (float) $r->takaran }} {{ $r->bahan->satuan_dasar }}</td>
-                <td class="px-3 py-2 text-right">
-                    <form method="POST" action="{{ route('manajer.menu.recipe.destroy', [$menu, $r]) }}">
-                        @csrf
-                        @method('DELETE')
-                        <button class="font-medium text-red-600 hover:underline">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-        @empty
-            <tr><td colspan="3" class="px-3 py-6 text-center text-amber-700">Belum ada bahan. Menu tanpa resep tidak bisa diaktifkan.</td></tr>
-        @endforelse
-        </tbody>
-    </table>
+    <div class="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
+        Satu resep dihitung untuk satu porsi. Satuan mengikuti satuan dasar bahan, misalnya gram, ml, atau pcs.
     </div>
 
-    <form method="POST" action="{{ route('manajer.menu.recipe.store', $menu) }}" class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_9rem_auto] sm:items-start">
+    @if ($menu->resep->isNotEmpty())
+        <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="w-full text-left text-sm text-gray-600">
+                <thead class="bg-gray-50 text-xs uppercase text-gray-700">
+                    <tr>
+                        <th class="px-4 py-3">Bahan</th>
+                        <th class="px-4 py-3 text-right">Takaran per porsi</th>
+                        <th class="px-4 py-3 text-right">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                @foreach ($menu->resep as $r)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 font-medium text-gray-900">{{ $r->bahan->nama }}</td>
+                        {{-- (float) biar "18.000" tampil jadi "18" --}}
+                        <td class="px-4 py-3 text-right tabular-nums">{{ (float) $r->takaran }} {{ $r->bahan->satuan_dasar }}</td>
+                        <td class="px-4 py-3 text-right">
+                            <form method="POST" action="{{ route('manajer.menu.recipe.destroy', [$menu, $r]) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button class="font-medium text-red-700 hover:underline">Hapus dari resep</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+    @else
+        <div class="rounded-lg border border-amber-200 bg-amber-50 p-4">
+            <p class="font-medium text-amber-900">Belum ada bahan dalam resep.</p>
+            <p class="mt-1 text-sm text-amber-800">Tambahkan setidaknya satu bahan agar menu bisa diaktifkan.</p>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('manajer.menu.recipe.store', $menu) }}" class="grid gap-4 rounded-lg border border-gray-200 p-4 sm:grid-cols-[minmax(0,1fr)_10rem_auto] sm:items-end">
         @csrf
         <div>
+            <label for="bahan_id" class="mb-1.5 block text-sm font-medium text-gray-900">Pilih bahan</label>
             <select name="bahan_id" required
+                    id="bahan_id"
                     class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600">
                 <option value="">Pilih bahan</option>
                 @foreach ($ingredients as $b)
@@ -100,13 +111,14 @@
             @error('bahan_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
         <div>
-            <input name="takaran" type="number" step="0.001" min="0" placeholder="Takaran" required
+            <label for="takaran" class="mb-1.5 block text-sm font-medium text-gray-900">Takaran per porsi</label>
+            <input id="takaran" name="takaran" type="number" step="0.001" min="0" placeholder="Contoh: 18" required
                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600">
             @error('takaran') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
-        <button class="rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-800">Simpan</button>
+        <button class="rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-800">Simpan bahan</button>
     </form>
-    <p class="text-xs text-gray-500">Memilih bahan yang sudah ada di resep akan mengubah takarannya.</p>
+    <p class="-mt-3 text-xs text-gray-500">Jika bahan sudah ada di resep, menyimpan ulang akan memperbarui takarannya, bukan membuat baris baru.</p>
 </section>
 @endif
 @endsection
