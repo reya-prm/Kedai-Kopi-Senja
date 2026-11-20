@@ -6,4 +6,4 @@
         'dibatalkan' => 'bg-red-100 text-red-800',
     ];
 @endphp
-<span class="{{ $map[$status] }} text-xs font-medium px-2.5 py-0.5 rounded">{{ ucfirst($status) }}</span>
+<span class="{{ $map[$status] }} inline-flex rounded-full px-2.5 py-1 text-xs font-medium">{{ ucfirst($status) }}</span>

@@ -7,14 +7,14 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 print:bg-white">
-    <div class="max-w-sm p-6 mx-auto my-6 font-mono text-sm text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm print:my-0 print:border-0 print:shadow-none">
+    <div class="mx-auto my-6 max-w-sm rounded-xl border border-gray-200 bg-white p-6 font-mono text-sm text-gray-900 shadow-sm print:my-0 print:border-0 print:shadow-none">
 
         <div class="text-center">
             <h1 class="text-lg font-bold">Kedai Kopi Senja</h1>
             <p class="text-xs text-gray-500">Struk Pembayaran</p>
         </div>
 
-        <hr class="my-3 border-dashed">
+        <hr class="my-4 border-dashed border-gray-300">
 
         {{-- info pesanan --}}
         <dl class="space-y-1 text-xs">
@@ -33,7 +33,7 @@
             <p class="py-1 mt-3 font-bold text-center text-red-600 border border-red-600 border-dashed">PESANAN DIBATALKAN</p>
         @endif
 
-        <hr class="my-3 border-dashed">
+        <hr class="my-4 border-dashed border-gray-300">
 
         {{-- rincian item. nama dan harga dari snapshot detail_pesanan, bukan dari tabel menu,
              jadi struk lama nggak ikut berubah kalau menunya diganti harga atau namanya --}}
@@ -47,7 +47,7 @@
             </div>
         @endforeach
 
-        <hr class="my-3 border-dashed">
+        <hr class="my-4 border-dashed border-gray-300">
 
         {{-- semua angka di bawah diambil dari yang tersimpan waktu transaksi, nggak dihitung ulang.
              urutannya: service dari subtotal, lalu pajak dari (subtotal + service) --}}
@@ -64,18 +64,18 @@
                 <dt>Pajak (10% dari Rp{{ number_format($pesanan->subtotal + $pesanan->service, 0, ',', '.') }})</dt>
                 <dd>Rp{{ number_format($pesanan->pajak, 0, ',', '.') }}</dd>
             </div>
-            <div class="flex justify-between pt-2 mt-1 text-base font-bold border-t border-dashed">
+            <div class="mt-1 flex justify-between border-t border-dashed border-gray-400 pt-3 text-base font-bold">
                 <dt>TOTAL</dt>
                 <dd>Rp{{ number_format($pesanan->total, 0, ',', '.') }}</dd>
             </div>
         </dl>
 
-        <p class="mt-4 text-xs text-center text-gray-500">Terima kasih, sampai jumpa lagi!</p>
+        <p class="mt-5 text-center text-xs text-gray-500">Terima kasih, sampai jumpa lagi!</p>
 
         {{-- tombol ini nggak ikut tercetak (print:hidden) --}}
         <div class="flex gap-3 mt-5 print:hidden">
             <a href="{{ route('kasir.orders.show', $pesanan) }}"
-               class="flex-1 px-4 py-2 text-sm font-medium text-center text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">Kembali</a>
+               class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-center text-sm font-medium text-gray-700 hover:bg-gray-50">Kembali</a>
         </div>
     </div>
 </body>

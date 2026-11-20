@@ -2,29 +2,32 @@
 @section('title', 'Pelanggan')
 
 @section('content')
-<h1 class="text-xl font-bold">Pelanggan</h1>
+<div>
+    <h1 class="text-2xl font-bold text-gray-900">Pelanggan</h1>
+    <p class="mt-1 text-sm text-gray-500">Cari akun pelanggan dan bantu reset password.</p>
+</div>
 
-<form method="GET" action="{{ route('kasir.customers.index') }}" class="flex max-w-md gap-2">
+<form method="GET" action="{{ route('kasir.customers.index') }}" class="flex max-w-xl gap-2 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
     <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nomor HP"
-           class="flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5">
-    <button class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2.5">Cari</button>
+           class="min-w-0 flex-1 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600">
+    <button class="rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-800">Cari</button>
 </form>
 
-<div class="relative overflow-x-auto bg-white border border-gray-200 rounded-lg shadow-sm">
-    <table class="w-full text-sm text-left text-gray-500">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+<div class="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+    <table class="w-full text-left text-sm text-gray-600">
+        <thead class="bg-gray-50 text-xs uppercase text-gray-700">
             <tr>
-                <th class="px-6 py-3">Nama</th>
-                <th class="px-6 py-3">Nomor HP</th>
-                <th class="px-6 py-3"></th>
+                <th class="px-5 py-3">Nama</th>
+                <th class="px-5 py-3">Nomor HP</th>
+                <th class="px-5 py-3 text-right">Aksi</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y divide-gray-100">
         @forelse ($items as $u)
-            <tr class="bg-white border-b border-gray-200">
-                <td class="px-6 py-3 font-medium text-gray-900">{{ $u->name }}</td>
-                <td class="px-6 py-3">{{ $u->phone }}</td>
-                <td class="px-6 py-3 text-right">
+            <tr class="transition-colors hover:bg-gray-50">
+                <td class="px-5 py-3 font-medium text-gray-900">{{ $u->name }}</td>
+                <td class="px-5 py-3">{{ $u->phone }}</td>
+                <td class="px-5 py-3 text-right">
                     <form method="POST" action="{{ route('kasir.customers.reset', $u) }}"
                           onsubmit="return confirm('Reset password pelanggan ini?')">
                         @csrf
@@ -34,7 +37,7 @@
                 </td>
             </tr>
         @empty
-            <tr><td colspan="3" class="px-6 py-4 text-center">Belum ada pelanggan.</td></tr>
+            <tr><td colspan="3" class="px-5 py-10 text-center text-gray-500">Belum ada pelanggan.</td></tr>
         @endforelse
         </tbody>
     </table>

@@ -9,4 +9,4 @@
     ];
     [$label, $class] = $map[$status];
 @endphp
-<span class="{{ $class }} text-xs font-medium px-2.5 py-0.5 rounded">{{ $label }}</span>
+<span class="{{ $class }} inline-flex rounded-full px-2.5 py-1 text-xs font-medium">{{ $label }}</span>

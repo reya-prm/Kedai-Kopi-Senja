@@ -2,45 +2,51 @@
 @section('title', 'Bahan')
 
 @section('content')
-<div class="flex items-center justify-between">
-    <h1 class="text-xl font-bold">Bahan</h1>
+<div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">Bahan</h1>
+        <p class="mt-1 text-sm text-gray-500">Kelola stok, harga, dan batas minimum bahan.</p>
+    </div>
     <a href="{{ route('manajer.bahan.create') }}"
-       class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2">+ Tambah Bahan</a>
+       class="rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
+        + Tambah Bahan
+    </a>
 </div>
 
 @include('manajer._supplier-info')
 
-<div class="relative overflow-x-auto bg-white border border-gray-200 rounded-lg shadow-sm">
-    <table class="w-full text-sm text-left text-gray-500">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+<div class="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+    <table class="w-full text-left text-sm text-gray-600">
+        <thead class="bg-gray-50 text-xs uppercase text-gray-700">
             <tr>
-                <th class="px-6 py-3">Nama</th>
-                <th class="px-6 py-3">Satuan</th>
-                <th class="px-6 py-3 text-right">Stok</th>
-                <th class="px-6 py-3 text-right">Harga/satuan</th>
-                <th class="px-6 py-3 text-right">Batas minimum</th>
-                <th class="px-6 py-3">Status</th>
+                <th class="px-5 py-3">Nama</th>
+                <th class="px-5 py-3">Satuan</th>
+                <th class="px-5 py-3 text-right">Stok</th>
+                <th class="px-5 py-3 text-right">Harga/satuan</th>
+                <th class="px-5 py-3 text-right">Batas minimum</th>
+                <th class="px-5 py-3">Status</th>
+                <th class="px-5 py-3 text-right">Aksi</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y divide-gray-100">
         @forelse ($items as $b)
-            <tr class="bg-white border-b border-gray-200">
-                <td class="px-6 py-3 font-medium text-gray-900">{{ $b->nama }}</td>
-                <td class="px-6 py-3">{{ $b->satuan_dasar }}</td>
+            <tr class="transition-colors hover:bg-gray-50">
+                <td class="px-5 py-3 font-medium text-gray-900">{{ $b->nama }}</td>
+                <td class="px-5 py-3">{{ $b->satuan_dasar }}</td>
                 {{-- (float) dipakai biar "300.000" tampil jadi "300" --}}
-                <td class="px-6 py-3 text-right">{{ (float) $b->stok }}</td>
+                <td class="px-5 py-3 text-right tabular-nums">{{ (float) $b->stok }}</td>
                 {{-- harga per satuan dasar: per g, per ml, atau per pcs sesuai kolom Satuan --}}
-                <td class="px-6 py-3 text-right">Rp{{ (float) $b->harga_per_satuan }}</td>
-                <td class="px-6 py-3 text-right">{{ (float) $b->batas_minimum }}</td>
-                <td class="px-6 py-3">
+                <td class="px-5 py-3 text-right tabular-nums">Rp{{ (float) $b->harga_per_satuan }}</td>
+                <td class="px-5 py-3 text-right tabular-nums">{{ (float) $b->batas_minimum }}</td>
+                <td class="px-5 py-3">
                 {{-- is_low_stock datang dari accessor di model Bahan --}}
                     @if ($b->is_low_stock)
-                        <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Menipis</span>
+                        <span class="inline-flex rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-800">Menipis</span>
                     @else
-                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Aman</span>
+                        <span class="inline-flex rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800">Aman</span>
                     @endif
                 </td>
-                <td class="px-6 py-3 text-right whitespace-nowrap">
+                <td class="whitespace-nowrap px-5 py-3 text-right">
                     <a href="{{ route('manajer.bahan.edit', $b) }}" class="font-medium text-blue-700 hover:underline">Ubah</a>
                     <form method="POST" action="{{ route('manajer.bahan.destroy', $b) }}" class="inline ml-3"
                         onsubmit="return confirm('Hapus bahan ini?')">
@@ -51,7 +57,7 @@
                 </td>
             </tr>
         @empty
-            <tr><td colspan="5" class="px-6 py-4 text-center">Belum ada bahan.</td></tr>
+            <tr><td colspan="7" class="px-5 py-10 text-center text-gray-500">Belum ada bahan.</td></tr>
         @endforelse
         </tbody>
     </table>
