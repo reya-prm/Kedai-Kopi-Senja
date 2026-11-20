@@ -33,7 +33,11 @@ class LoginController extends Controller
         // ganti ID sesi setelah login, biar sesi lama nggak bisa dipakai orang lain
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard');
+        return match (Auth::user()->role) {
+            'manajer' => redirect()->route('manajer.bahan.index'),
+            'kasir' => redirect()->route('kasir.menu.index'),
+            default => abort(403),
+        };
     }
 
     public function logout(Request $request)

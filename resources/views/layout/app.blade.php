@@ -9,7 +9,7 @@
 <body class="bg-gray-50 text-gray-900">
     <nav class="border-b border-gray-200 bg-white">
         <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3 text-sm">
-            <a href="{{ route('dashboard') }}" class="shrink-0 text-lg font-bold text-gray-900">
+            <a href="{{ route('home') }}" class="shrink-0 text-lg font-bold text-gray-900">
                 Kedai Kopi Senja
             </a>
 
@@ -20,7 +20,7 @@
                     <a href="{{ route('manajer.menu.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Menu</a>
                     <a href="{{ route('manajer.resep.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Resep</a>
                     <a href="{{ route('manajer.stok.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Stok Masuk</a>
-                    <a href="{{ route('manajer.laporan.margin') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Laporan</a>
+                    <a href="{{ route('manajer.laporan.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Laporan</a>
                     <a href="{{ route('manajer.bahan.low-stock') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Bahan Menipis</a>
                     <a href="{{ route('password.edit') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Ganti Password</a>
                 @endif

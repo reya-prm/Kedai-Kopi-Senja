@@ -16,8 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
     // biar di rute bisa nulis ->middleware('role:manajer')
     $middleware->alias(['role' => CheckRole::class]);
 
-    // yang udah login tapi buka /login lagi dilempar ke dashboard
-    $middleware->redirectUsersTo('/dashboard');
+    $middleware->redirectUsersTo(fn (Request $request) => match ($request->user()->role) {
+        'manajer' => route('manajer.bahan.index'),
+        'kasir' => route('kasir.menu.index'),
+        default => abort(403),
+    });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

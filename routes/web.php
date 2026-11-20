@@ -6,15 +6,23 @@ use App\Http\Controllers\Kasir\OrderController;
 use App\Http\Controllers\Manajer\BahanController;
 use App\Http\Controllers\Manajer\LaporanController;
 use App\Http\Controllers\Manajer\MenuController;
-use App\Http\Controllers\Manajer\SalesReportController;
 use App\Http\Controllers\Manajer\StokMasukController;
 use App\Http\Controllers\Manajer\SupplierController;
-use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\LoginController;
 use App\Http\Controllers\Web\PasswordController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/dashboard');
+Route::get('/', function () {
+    if (auth()->guest()) {
+        return redirect()->route('login');
+    }
+
+    return match (auth()->user()->role) {
+        'manajer' => redirect()->route('manajer.bahan.index'),
+        'kasir' => redirect()->route('kasir.menu.index'),
+        default => abort(403),
+    };
+})->name('home');
 
 // buat yang BELUM login
 Route::middleware('guest')->group(function () {
@@ -24,7 +32,6 @@ Route::middleware('guest')->group(function () {
 
 // buat yang SUDAH login
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/password', [PasswordController::class, 'edit'])->name('password.edit');
     Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
@@ -60,10 +67,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/stok-masuk', [StokMasukController::class, 'index'])->name('stok.index');
         Route::post('/stok-masuk', [StokMasukController::class, 'store'])->name('stok.store');
 
-        // laporan
-        Route::get('/laporan/margin', [LaporanController::class, 'margin'])->name('laporan.margin');
-        Route::get('/laporan/penjualan', [LaporanController::class, 'penjualan'])->name('laporan.penjualan');
-        Route::get('/laporan/penjualan-menu', [SalesReportController::class, 'index'])->name('report.sales');
+        // laporan terpadu (rute lama tetap diarahkan ke laporan yang sama)
+        Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/margin', [LaporanController::class, 'index'])->name('laporan.margin');
+        Route::get('/laporan/penjualan', [LaporanController::class, 'index'])->name('laporan.penjualan');
+        Route::get('/laporan/penjualan-menu', [LaporanController::class, 'index'])->name('report.sales');
 
         // sinkron harga supplier
         Route::post('/supplier/sync', [SupplierController::class, 'sync'])->name('supplier.sync');
@@ -88,8 +96,4 @@ Route::middleware('auth')->group(function () {
         Route::get('/pelanggan', [CustomerController::class, 'index'])->name('customers.index');
         Route::patch('/pelanggan/{user}/reset-password', [CustomerController::class, 'resetPassword'])->name('customers.reset');
     });
-
-    // rute uji sementara dari tahap login, dihapus nanti
-    Route::middleware('role:manajer')->get('/uji/manajer', [DashboardController::class, 'testManajer'])->name('test.manajer');
-    Route::middleware('role:kasir')->get('/uji/kasir', [DashboardController::class, 'testKasir'])->name('test.kasir');
 });
