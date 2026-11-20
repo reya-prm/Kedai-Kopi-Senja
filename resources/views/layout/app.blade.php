@@ -19,7 +19,7 @@
                     <a href="{{ route('manajer.bahan.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Kelola Bahan</a>
                     <a href="{{ route('manajer.menu.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Kelola Menu</a>
                     <a href="{{ route('manajer.resep.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Kelola Resep</a>
-                    <a href="{{ route('manajer.stok.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Kelola Stok Masuk</a>
+                    <a href="{{ route('manajer.stok.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Kelola Stok</a>
                     <a href="{{ route('manajer.laporan.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Laporan</a>
                     <a href="{{ route('manajer.bahan.low-stock') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Bahan Menipis</a>
                     <a href="{{ route('password.edit') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Ganti Password</a>

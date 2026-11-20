@@ -9,6 +9,13 @@
         <p class="mt-1 text-sm text-gray-600">
             Ringkasan penjualan untuk pesanan.
         </p>
+        <a href="{{ route('manajer.laporan.jam-ramai') }}" class="mt-3 flex max-w-xl items-center justify-between gap-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 transition hover:border-blue-300 hover:bg-blue-100">
+            <span>
+                <span class="block text-sm font-semibold text-blue-900">Laporan Jam Ramai</span>
+                <span class="mt-0.5 block text-sm text-blue-800">Lihat aktivitas pesanan selesai berdasarkan jam.</span>
+            </span>
+            <span aria-hidden="true" class="text-lg font-semibold text-blue-700">→</span>
+        </a>
     </div>
 
     <form method="GET" action="{{ route('manajer.laporan.index') }}"

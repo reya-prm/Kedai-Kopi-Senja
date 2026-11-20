@@ -4,13 +4,15 @@ use App\Http\Controllers\Kasir\CustomerController;
 use App\Http\Controllers\Kasir\MenuListController;
 use App\Http\Controllers\Kasir\OrderController;
 use App\Http\Controllers\Manajer\BahanController;
+use App\Http\Controllers\Manajer\JamRamaiController;
 use App\Http\Controllers\Manajer\LaporanController;
 use App\Http\Controllers\Manajer\MenuController;
+use App\Http\Controllers\Manajer\PenyesuaianStokController;
 use App\Http\Controllers\Manajer\StokMasukController;
 use App\Http\Controllers\Manajer\SupplierController;
 use App\Http\Controllers\Web\LoginController;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Web\PasswordController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -67,9 +69,12 @@ Route::middleware('auth')->group(function () {
         // stok masuk
         Route::get('/stok-masuk', [StokMasukController::class, 'index'])->name('stok.index');
         Route::post('/stok-masuk', [StokMasukController::class, 'store'])->name('stok.store');
+        Route::get('/penyesuaian-stok', [PenyesuaianStokController::class, 'index'])->name('penyesuaian-stok.index');
+        Route::post('/penyesuaian-stok', [PenyesuaianStokController::class, 'store'])->name('penyesuaian-stok.store');
 
         // laporan terpadu (rute lama tetap diarahkan ke laporan yang sama)
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/jam-ramai', [JamRamaiController::class, 'index'])->name('laporan.jam-ramai');
         Route::get('/laporan/margin', [LaporanController::class, 'index'])->name('laporan.margin');
         Route::get('/laporan/penjualan', [LaporanController::class, 'index'])->name('laporan.penjualan');
         Route::get('/laporan/penjualan-menu', [LaporanController::class, 'index'])->name('report.sales');

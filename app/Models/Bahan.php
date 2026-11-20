@@ -11,7 +11,7 @@ class Bahan extends Model
     protected $table = 'bahan';
 
     protected $fillable = [
-        'kode','nama', 'kunci_nama', 'satuan_dasar', 'stok',
+        'kode', 'nama', 'kunci_nama', 'satuan_dasar', 'stok',
         'batas_minimum', 'harga_per_satuan', 'harga_diperbarui_pada',
     ];
 
@@ -39,18 +39,17 @@ class Bahan extends Model
         return mb_strtolower(trim($nama));
     }
 
-    //nge filter stok yang menipis
+    // nge filter stok yang menipis
     public function scopeLowStock($query)
     {
         return $query->whereColumn('stok', '<=', 'batas_minimum');
     }
 
-    //cek satu data stok barang menipis atau ga 
+    // cek satu data stok barang menipis atau ga
     public function getIsLowStockAttribute(): bool
     {
         return round((float) $this->stok, 3) <= round((float) $this->batas_minimum, 3);
     }
-
 
     public function resep(): HasMany
     {
@@ -60,5 +59,10 @@ class Bahan extends Model
     public function stokMasuk(): HasMany
     {
         return $this->hasMany(StokMasuk::class, 'bahan_id');
+    }
+
+    public function penyesuaianStok(): HasMany
+    {
+        return $this->hasMany(PenyesuaianStok::class, 'bahan_id');
     }
 }

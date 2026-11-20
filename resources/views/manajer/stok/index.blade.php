@@ -1,12 +1,23 @@
 @extends('layout.app')
-@section('title', 'Stok Masuk')
+@section('title', 'Kelola Stok')
 
 @section('content')
+<div class="space-y-5">
+<div>
+    <h1 class="text-2xl font-bold text-gray-900">Kelola Stok</h1>
+    <p class="mt-1 text-sm text-gray-500">Catat stok masuk, stock opname, atau bahan rusak.</p>
+</div>
+
+<nav aria-label="Navigasi kelola stok" class="inline-flex flex-wrap gap-2 rounded-xl border border-gray-200 bg-white p-2 shadow-sm">
+    <a href="{{ route('manajer.stok.index') }}" aria-current="page" class="rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-800">Stok Masuk</a>
+    <a href="{{ route('manajer.penyesuaian-stok.index') }}" class="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-blue-700">Penyesuaian Stok</a>
+</nav>
+
 <form method="POST" action="{{ route('manajer.stok.store') }}"
       class="space-y-5 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
     @csrf
     <div>
-        <h1 class="text-2xl font-bold text-gray-900">Catat Stok Masuk</h1>
+        <h2 class="text-xl font-bold text-gray-900">Catat Stok Masuk</h2>
         <p class="mt-1 text-sm text-gray-500">Stok akan bertambah sesuai jumlah yang dicatat.</p>
     </div>
 
@@ -75,4 +86,5 @@
     </table>
     </div>
 </section>
+</div>
 @endsection

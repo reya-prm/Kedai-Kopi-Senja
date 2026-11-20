@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class StokMasukController extends Controller
-{   
-    //form buat catat stok + riwayat 50 catatan terakhir
+{
+    // form buat catat stok + riwayat 50 catatan terakhir
     public function index()
-    {   
+    {
         return view('manajer.stok.index', [
             'ingredients' => Bahan::orderBy('nama')->get(),
             'items' => StokMasuk::with(['bahan', 'user'])->latest()->limit(50)->get(),
@@ -24,11 +24,11 @@ class StokMasukController extends Controller
         $data = $request->validate([
             'bahan_id' => ['required', 'exists:bahan,id'],
             'jumlah' => ['required', 'numeric', 'gt:0', 'decimal:0,3', 'max:99999999'],
-            //gunanya biar gabisa pilih tanggal masa depan, jadi cukup di hari itu aja
+            // gunanya biar gabisa pilih tanggal masa depan, jadi cukup di hari itu aja
             'tanggal' => ['required', 'date', 'before_or_equal:today'],
         ]);
 
-        DB::transaction(function () use ($data, $request){
+        DB::transaction(function () use ($data, $request) {
             StokMasuk::create([
                 'bahan_id' => $data['bahan_id'],
                 'user_id' => $request->user()->id,
@@ -39,6 +39,6 @@ class StokMasukController extends Controller
             Bahan::where('id', $data['bahan_id'])->increment('stok', $data['jumlah']);
         });
 
-        return back()->with('succes', 'Stok masuk telat dicatat');
+        return back()->with('success', 'Stok masuk berhasil dicatat.');
     }
 }
