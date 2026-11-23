@@ -36,7 +36,7 @@ class BahanController extends Controller
             'batas_minimum' => ['required', 'numeric', 'min:0', 'max:99999999'],
         ]);
 
-        // cek nama ganda: "Susu" dan " susu " dianggap sama (huruf besar/kecil dan spasi pinggir diabaikan)
+        // cek nama ganda: "Susu" dan " susu " dianggap sama
         $key = Bahan::makeKey($data['nama']);
 
         if (Bahan::where('kunci_nama', $key)->exists()) {

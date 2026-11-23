@@ -13,8 +13,7 @@ class CheckRole
     {
         $user = $request->user();
 
-        // belum login, atau perannya nggak ada di daftar yang boleh -> tolak (403).
-        // ini yang bikin orang nggak bisa nyelonong lewat ngetik URL langsung
+        // belum login, atau perannya nggak ada di daftar yang boleh ditolak (403).
         if (! $user || ! in_array($user->role, $roles, true)) {
             abort(403, 'Anda tidak berhak mengakses halaman ini.');
         }
