@@ -31,6 +31,7 @@
                     <a href="{{ route('kasir.orders.create') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Buat Pesanan</a>
                     <a href="{{ route('kasir.orders.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Kelola Pesanan</a>
                     <a href="{{ route('kasir.customers.index') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Reset Password Pelanggan</a>
+                    <a href="{{ route('password.edit') }}" class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-700">Ganti Password</a>
                 @endif
             </div>
 
