@@ -44,11 +44,6 @@
         <div class="flex justify-between pt-1 font-bold text-gray-900 border-t"><dt>Total</dt><dd>Rp{{ number_format($pesanan->total, 0, ',', '.') }}</dd></div>
     </dl>
 
-    <a href="{{ route('kasir.orders.receipt', $pesanan) }}" target="_self"
-    class="inline-block rounded-lg border border-blue-700 px-5 py-2.5 text-sm font-medium text-blue-700 hover:bg-blue-50">
-        Lihat Struk
-    </a>
-
     {{-- tombol yang tampil cuma langkah yang valid. servernya tetap ngecek ulang --}}
     @if ($pesanan->status === 'baru')
         <div class="flex gap-3">
@@ -73,6 +68,11 @@
             <input type="hidden" name="status" value="selesai">
             <button class="rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800">Selesai</button>
         </form>
+    @elseif ($pesanan->status === 'selesai')
+        <a href="{{ route('kasir.orders.receipt', $pesanan) }}" target="_self"
+        class="inline-block rounded-lg border border-blue-700 px-5 py-2.5 text-sm font-medium text-blue-700 hover:bg-blue-50">
+        Lihat Struk
+    </a>    
     @endif
 
     <a href="{{ route('kasir.orders.index') }}" class="text-sm text-gray-600 hover:underline">Kembali ke daftar</a>
