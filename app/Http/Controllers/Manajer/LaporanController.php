@@ -56,10 +56,12 @@ class LaporanController extends Controller
                     $adaHargaNol = true;
                 }
 
+                //hitung hpp
                 $hpp += (float) $resep->takaran * $hargaBahan;
             }
 
             $punyaResep = $menu->resep->isNotEmpty();
+            //hitung margin dan persen margin, kalau menu belum punya resep atau harganya 0, margin = 0
             $margin = $punyaResep ? $menu->harga - $hpp : 0;
             $persenMargin = $punyaResep && $menu->harga > 0
                 ? ($margin / $menu->harga) * 100
